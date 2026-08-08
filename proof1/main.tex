@@ -1,0 +1,370 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\title{Value of the block rearrangements of the alternating harmonic series}
+\author{Kingshuk Patra}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Facts we are borrowing}
+
+I am not prooving these 2, just borrowing as known properties. First can be shown by arithmatic manipulation, and second can be shown from the digamma I guess.
+
+\medskip
+\noindent\textbf{Fact 1 (odd and even part of a harmonic sequence).}
+For $m \in \mathbb{N}$ let $H_m = \sum_{k=1}^{m} \frac{1}{k}$. Then
+\[
+\sum_{k=1}^{m} \frac{1}{2k} \;=\; \frac{1}{2} H_m ,
+\qquad
+\sum_{k=1}^{m} \frac{1}{2k-1} \;=\; H_{2m} - \frac{1}{2} H_m .
+\]
+
+\medskip
+\noindent\textbf{Fact 2 (Euler--Mascheroni constant).}
+$\gamma$ is defined by
+\[
+\gamma \;=\; \lim_{m \to \infty} \left( H_m - \ln m \right).
+\]
+Set
+\[
+\varepsilon_m \;:=\; H_m - \ln m - \gamma , \qquad m \in \mathbb{N},
+\]
+so that
+\begin{equation}\label{eq:Hexp}
+H_m \;=\; \ln m + \gamma + \varepsilon_m \qquad \forall m \in \mathbb{N},
+\end{equation}
+and so, by the definition of convergence of this,
+\begin{equation}\label{eq:epsdef}
+\forall \epsilon > 0 \;\; \exists M \in \mathbb{N} \;\; \forall m \ge M : \;
+\left| \varepsilon_m \right| < \epsilon .
+\end{equation}
+
+
+\section{Defining the series}
+
+Let $a_j = \dfrac{(-1)^{j+1}}{j}$ for $j \in \mathbb{N}$. Its positive terms, in their
+natural order, are
+\[
+p_k = \frac{1}{2k-1}, \qquad k \in \mathbb{N},
+\]
+and its negative terms, in their natural order, are
+\[
+q_k = -\frac{1}{2k}, \qquad k \in \mathbb{N}.
+\]
+
+Now for $(P,Q) \in \mathbb{N} \times \mathbb{N}$. let's define $F(P,Q)$ to be the infinite sequence
+built by taking $P$ positive terms, then $Q$ negative terms, then the next $P$ +ve
+terms, then the next $Q$ -ve terms, and so on.
+
+Formally: for $i \in \mathbb{N}$, by the division algorithm there are unique
+$n \in \mathbb{Z}_{\ge 0}$ and $r \in \mathbb{Z}$ with
+\[
+i - 1 \;=\; n(P+Q) + r, \qquad 0 \le r < P+Q .
+\]
+
+Call $n =: \beta(i)$ the block of $i$ and $r =: \rho(i)$ the position of $i$ inside its
+block. Define the $i$-th term of $F(P,Q)$ by
+\begin{equation}\label{eq:bdef}
+b_i^{(P,Q)} \;=\;
+\begin{cases}
+p_{\,Pn + r + 1}, & 0 \le r < P, \\[4pt]
+q_{\,Qn + r - P + 1}, & P \le r < P+Q ,
+\end{cases}
+\qquad n = \beta(i),\; r = \rho(i).
+\end{equation}
+
+\begin{lemma}\label{lem:bij}
+Every $p_k$ $(k \in \mathbb{N})$ and every $q_k$ $(k \in \mathbb{N})$ occurs exactly once
+in the sequence $\bigl(b_i^{(P,Q)}\bigr)_{i \in \mathbb{N}}$. Hence $F(P,Q)$ is a
+rearrangement of $(a_j)_{j \in \mathbb{N}}$.
+\end{lemma}
+
+\begin{proof}
+Let $\mathcal{I}^{+} = \{ i \in \mathbb{N} : 0 \le \rho(i) < P \}$ and
+$\mathcal{I}^{-} = \{ i \in \mathbb{N} : P \le \rho(i) < P+Q \}$. These partition
+$\mathbb{N}$, and by \eqref{eq:bdef} the terms indexed by $\mathcal{I}^{+}$ are exactly
+the positive ones and those indexed by $\mathcal{I}^{-}$ the negative ones.
+
+Consider $\varphi : \mathcal{I}^{+} \to \mathbb{N}$, $\varphi(i) = P\beta(i) + \rho(i) + 1$.
+
+\emph{Surjective.} Given $k \in \mathbb{N}$, write $k - 1 = Pn + r$ with
+$n = \lfloor (k-1)/P \rfloor \ge 0$ and $0 \le r < P$ (division algorithm). Put
+$i = n(P+Q) + r + 1$. Since $0 \le r < P \le P+Q-1$, uniqueness in the division
+algorithm gives $\beta(i) = n$ and $\rho(i) = r$, so $i \in \mathcal{I}^{+}$ and
+$\varphi(i) = Pn + r + 1 = k$.
+
+\emph{Injective.} If $\varphi(i) = \varphi(i')$ then $P\beta(i) + \rho(i) = P\beta(i') + \rho(i')$
+with $0 \le \rho(i), \rho(i') < P$; uniqueness of division by $P$ forces
+$\beta(i) = \beta(i')$ and $\rho(i) = \rho(i')$, hence $i = i'$.
+
+So $\varphi$ is a bijection, i.e.\ each $p_k$ occurs exactly once. The same argument with
+$\psi : \mathcal{I}^{-} \to \mathbb{N}$, $\psi(i) = Q\beta(i) + \rho(i) - P + 1$, and
+$0 \le \rho(i) - P < Q$, handles the $q_k$.
+\end{proof}
+
+The partial sums of $F(P,Q)$ are
+\[
+S_N^{(P,Q)} \;=\; \sum_{i=1}^{N} b_i^{(P,Q)}, \qquad N \in \mathbb{N}.
+\]
+Define also the positive-count function
+\[
+\pi_{P,Q}(N) \;=\; \#\bigl\{\, i \le N : b_i^{(P,Q)} > 0 \,\bigr\}.
+\]
+
+\begin{lemma}\label{lem:pi}
+Write $N = n(P+Q) + r$ with $n \in \mathbb{Z}_{\ge 0}$, $0 \le r < P+Q$. Then
+\[
+\pi_{P,Q}(N) \;=\; Pn + \min(r, P),
+\]
+and moreover the first $N$ terms of $F(P,Q)$ consist of exactly
+$p_1, \dots, p_{\pi_{P,Q}(N)}$ and $q_1, \dots, q_{N - \pi_{P,Q}(N)}$, each once.
+\end{lemma}
+
+\begin{proof}
+The indices $i \le N$ are exactly those with $\beta(i) < n$, together with those with
+$\beta(i) = n$ and $\rho(i) < r$. Among the former, $\mathcal{I}^{+}$ contributes $P$
+indices per block, giving $Pn$. Among the latter, $\mathcal{I}^{+}$ contributes those
+with $\rho(i) < \min(r,P)$, giving $\min(r,P)$. This proves the formula.
+
+For the second claim, by the proof of Lemma \ref{lem:bij} the positive terms with
+$i \le N$ are $p_{\varphi(i)}$ where $\varphi$ is a bijection $\mathcal{I}^{+} \to \mathbb{N}$
+that is increasing in $i$ (as $\varphi(i) = P\beta(i) + \rho(i) + 1$ and both $\beta,\rho$
+increase lexicographically with $i$). An increasing bijection maps the first
+$\pi_{P,Q}(N)$ elements of $\mathcal{I}^{+}$ onto $\{1, \dots, \pi_{P,Q}(N)\}$. Same for
+$\psi$ and the negative terms.
+\end{proof}
+
+\section{What can and cannot be rearranged}
+
+The objection raised was that separating positive and negative terms is illegal. So
+before computing anything I want to fix exactly which finite rearrangements I am using,
+and which ones are not available with reasoning.
+
+\subsection*{Different $(P,Q)$ do not share partial sums}
+
+The natural thought: $F(P_1,Q_1)$ and $F(P_2,Q_2)$ are rearrangements of each other in
+the global sense (both are rearrangements of $(a_j)$ by Lemma \ref{lem:bij}), so maybe
+their partial sums are rearrangements of each other too, and then they would be forced to
+have the same limit. This fails for large $N$.
+
+\begin{lemma}\label{lem:notrearr}
+Let $(P_1,Q_1), (P_2,Q_2) \in \mathbb{N} \times \mathbb{N}$ satisfy
+$P_1 Q_2 \neq P_2 Q_1$. Put $c_i = \dfrac{P_i Q_i}{P_i + Q_i}$ and
+\[
+N_0 \;=\; \frac{(c_1 + c_2)(P_1+Q_1)(P_2+Q_2)}{\left| P_1 Q_2 - P_2 Q_1 \right|} .
+\]
+Then $\forall N \in \mathbb{N}$ with $N > N_0$, the first $N$ terms of $F(P_1,Q_1)$ and
+the first $N$ terms of $F(P_2,Q_2)$ are not rearrangements of each other.
+\end{lemma}
+
+\begin{proof}
+By Lemma \ref{lem:pi}, the first $N$ terms of $F(P_i,Q_i)$ form the set
+\[
+A_i \;=\; \{ p_1, \dots, p_{\pi_i(N)} \} \cup \{ q_1, \dots, q_{N - \pi_i(N)} \},
+\qquad \pi_i := \pi_{P_i,Q_i},
+\]
+with no repetitions. Two finite lists without repeated entries are rearrangements of each
+other iff they are equal as sets. Since the $p_k, q_k$ are pairwise distinct,
+$A_1 = A_2$ iff $\pi_1(N) = \pi_2(N)$. So it suffices to show $\pi_1(N) \ne \pi_2(N)$.
+
+Put $\alpha_i = \dfrac{P_i}{P_i+Q_i}$ and $d_i(N) = \pi_i(N) - \alpha_i N$. Writing
+$N = n(P_i+Q_i) + r$ with $0 \le r < P_i + Q_i$, Lemma \ref{lem:pi} gives
+\[
+d_i(N) \;=\; \bigl( P_i n + \min(r,P_i) \bigr) - \bigl( P_i n + \alpha_i r \bigr)
+\;=\; \min(r, P_i) - \frac{P_i r}{P_i + Q_i} .
+\]
+Two cases.
+If $0 \le r \le P_i$, then $d_i(N) = r\bigl(1 - \alpha_i\bigr) = \dfrac{r Q_i}{P_i+Q_i}$,
+which lies in $\bigl[0, \dfrac{P_i Q_i}{P_i + Q_i}\bigr]$ since $r \le P_i$.
+If $P_i < r < P_i + Q_i$, then
+$d_i(N) = P_i - \dfrac{P_i r}{P_i+Q_i} = \dfrac{P_i (P_i + Q_i - r)}{P_i + Q_i}$,
+and $0 < P_i + Q_i - r < Q_i$ puts this in $\bigl(0, \dfrac{P_i Q_i}{P_i+Q_i}\bigr)$.
+In both cases $\left| d_i(N) \right| \le c_i$.
+
+Hence, by the reverse triangle inequality,
+\[
+\left| \pi_1(N) - \pi_2(N) \right|
+\;=\; \left| (\alpha_1 - \alpha_2) N + d_1(N) - d_2(N) \right|
+\;\ge\; \left| \alpha_1 - \alpha_2 \right| N - c_1 - c_2 .
+\]
+Also
+\[
+\left| \alpha_1 - \alpha_2 \right|
+\;=\; \left| \frac{P_1}{P_1+Q_1} - \frac{P_2}{P_2+Q_2} \right|
+\;=\; \frac{\left| P_1 Q_2 - P_2 Q_1 \right|}{(P_1+Q_1)(P_2+Q_2)} \;>\; 0
+\]
+by hypothesis. So $N > N_0$ gives $\left| \alpha_1 - \alpha_2 \right| N - c_1 - c_2 > 0$,
+whence $\pi_1(N) \neq \pi_2(N)$.
+\end{proof}
+
+The hypothesis $P_1 Q_2 \ne P_2 Q_1$ cannot be dropped: for $(1,1)$ and $(2,2)$ we have
+$\alpha_1 = \alpha_2$ and the partial sums do agree along multiples of $4$. But then
+$P_1/Q_1 = P_2/Q_2$ and the value computed below is the same for both, so nothing breaks.
+
+So being a global rearrangement of each other says nothing about the partial sums, and
+there is no contradiction in $F(P_1,Q_1)$ and $F(P_2,Q_2)$ converging to different values.
+
+\subsection*{The rearrangement I am actually using}
+
+\begin{lemma}\label{lem:split}
+Let $N = n(P+Q)$ for some $n \in \mathbb{N}$, i.e.\ $(P+Q) \mid N$. Then
+\[
+S_N^{(P,Q)} \;=\; \sum_{k=1}^{Pn} \frac{1}{2k-1} \;-\; \sum_{k=1}^{Qn} \frac{1}{2k}.
+\]
+\end{lemma}
+
+\begin{proof}
+Here $r = 0$, so Lemma \ref{lem:pi} gives $\pi_{P,Q}(N) = Pn$ and
+$N - \pi_{P,Q}(N) = n(P+Q) - Pn = Qn$; moreover the first $N$ terms are exactly
+$p_1, \dots, p_{Pn}, q_1, \dots, q_{Qn}$, each occurring once.
+
+Therefore $S_N^{(P,Q)}$ is a sum of the $N$ real numbers
+$p_1,\dots,p_{Pn},q_1,\dots,q_{Qn}$, and $N$ is finite. Addition on $\mathbb{R}$ is
+commutative and associative, so by induction on the number of summands any permutation of
+a finite sum leaves it unchanged; in particular we may add all the $p$'s first and then
+all the $q$'s. Substituting $p_k = \frac{1}{2k-1}$ and $q_k = -\frac{1}{2k}$ gives the
+identity.
+\end{proof}
+
+This is the only place where positive and negative terms are separated, it is done on a
+finite sum, and it happens before any limit is taken. No infinite series of positive terms
+and no infinite series of negative terms appears anywhere in this proof.
+
+\section{the limit along the blocks}
+
+\begin{lemma}\label{lem:blocklimit}
+Let $L := \ln 2 + \dfrac{1}{2}\ln\!\left(\dfrac{P}{Q}\right)$. Then
+\[
+\forall \epsilon > 0 \;\; \exists n_0 \in \mathbb{N} \;\; \forall n \ge n_0 : \;
+\left| S_{n(P+Q)}^{(P,Q)} - L \right| < \epsilon .
+\]
+\end{lemma}
+
+\begin{proof}
+By Lemma \ref{lem:split} and Fact 1,
+\[
+S_{n(P+Q)}^{(P,Q)}
+\;=\; \left( H_{2Pn} - \frac{1}{2} H_{Pn} \right) - \frac{1}{2} H_{Qn}
+\;=\; H_{2Pn} - \frac{1}{2} H_{Pn} - \frac{1}{2} H_{Qn}.
+\]
+Apply \eqref{eq:Hexp} to each of the three harmonic numbers:
+\[
+S_{n(P+Q)}^{(P,Q)}
+= \bigl( \ln(2Pn) + \gamma \bigr)
+- \frac{1}{2}\bigl( \ln(Pn) + \gamma \bigr)
+- \frac{1}{2}\bigl( \ln(Qn) + \gamma \bigr)
++ \delta_n ,
+\]
+where
+\[
+\delta_n \;:=\; \varepsilon_{2Pn} - \tfrac{1}{2}\varepsilon_{Pn} - \tfrac{1}{2}\varepsilon_{Qn}.
+\]
+
+The $\gamma$'s cancel: $\gamma - \frac{1}{2}\gamma - \frac{1}{2}\gamma = 0$. Expanding the
+logarithms (all arguments are positive integers),
+\[
+\ln 2 + \ln P + \ln n
+- \tfrac{1}{2}\ln P - \tfrac{1}{2}\ln n
+- \tfrac{1}{2}\ln Q - \tfrac{1}{2}\ln n
+\;=\; \ln 2 + \tfrac{1}{2}\ln P - \tfrac{1}{2}\ln Q \;=\; L ,
+\]
+so the $\ln n$ terms cancel as well and
+\begin{equation}\label{eq:Sdelta}
+S_{n(P+Q)}^{(P,Q)} \;=\; L + \delta_n \qquad \forall n \in \mathbb{N}.
+\end{equation}
+
+It remains to show $\delta_n \to 0$. Let $\epsilon > 0$. By \eqref{eq:epsdef} applied
+with $\epsilon/2$, there is $M \in \mathbb{N}$ such that $|\varepsilon_m| < \epsilon/2$
+for all $m \ge M$. Put $n_0 = M$ (note $Pn \ge n$, $Qn \ge n$, $2Pn \ge n$ for all
+$n \in \mathbb{N}$, since $P, Q \ge 1$). Then for every $n \ge n_0$ the three indices
+$2Pn, Pn, Qn$ are all $\ge M$, so
+\[
+\left| \delta_n \right|
+\;\le\; \left| \varepsilon_{2Pn} \right| + \tfrac{1}{2}\left| \varepsilon_{Pn} \right|
++ \tfrac{1}{2}\left| \varepsilon_{Qn} \right|
+\;<\; \frac{\epsilon}{2} + \frac{\epsilon}{4} + \frac{\epsilon}{4} \;=\; \epsilon .
+\]
+With \eqref{eq:Sdelta} this is the proof for convergence for $(P+Q) | N$ case.
+\end{proof}
+
+
+\section{The general partial sum}
+
+Lemma \ref{lem:blocklimit} only covers $N$ divisible by $P+Q$. We now show the remaining
+$N$ change nothing.
+
+\begin{lemma}\label{lem:tail}
+For every $N \ge P+Q$, writing $N = n(P+Q) + r$ with $n \in \mathbb{N}$,
+$0 \le r < P+Q$,
+\[
+\left| S_N^{(P,Q)} - S_{n(P+Q)}^{(P,Q)} \right| \;\le\; \frac{P+Q}{2n \min(P,Q)} .
+\]
+\end{lemma}
+
+\begin{proof}
+We have
+\[
+S_N^{(P,Q)} - S_{n(P+Q)}^{(P,Q)} \;=\; \sum_{i = n(P+Q)+1}^{N} b_i^{(P,Q)} ,
+\]
+a sum of $r \le P+Q$ terms. Each such $i$ satisfies $n(P+Q) \le i - 1 < (n+1)(P+Q)$,
+so $\beta(i) = n$ by uniqueness in the division algorithm.
+
+By \eqref{eq:bdef}, if $b_i^{(P,Q)}$ is positive it equals $p_k$ with
+$k = Pn + \rho(i) + 1 \ge Pn+1$, so
+\[
+0 < p_k = \frac{1}{2k-1} \le \frac{1}{2(Pn+1)-1} = \frac{1}{2Pn+1}
+\le \frac{1}{2Pn} \le \frac{1}{2n\min(P,Q)} .
+\]
+If it is negative it equals $q_k$ with $k = Qn + \rho(i) - P + 1 \ge Qn+1$, so
+\[
+\left| q_k \right| = \frac{1}{2k} \le \frac{1}{2(Qn+1)} \le \frac{1}{2Qn}
+\le \frac{1}{2n\min(P,Q)} .
+\]
+The triangle inequality over at most $P+Q$ such terms gives the bound.
+\end{proof}
+
+\begin{theorem}
+For every $(P,Q) \in \mathbb{N} \times \mathbb{N}$ the series $F(P,Q)$ converges, and
+\[
+\lim_{N \to \infty} S_N^{(P,Q)} \;=\; \ln 2 + \frac{1}{2}\ln\!\left(\frac{P}{Q}\right).
+\]
+\end{theorem}
+
+\begin{proof}
+Let $L = \ln 2 + \frac{1}{2}\ln(P/Q)$ and let $\epsilon > 0$.
+
+By Lemma \ref{lem:blocklimit} there is $n_1 \in \mathbb{N}$ with
+$\left| S_{n(P+Q)}^{(P,Q)} - L \right| < \epsilon/2$ for all $n \ge n_1$.
+
+By the archimedean property there is $n_2 \in \mathbb{N}$ with
+$n_2 > \dfrac{P+Q}{\epsilon \min(P,Q)}$, so that
+$\dfrac{P+Q}{2n\min(P,Q)} < \dfrac{\epsilon}{2}$ for all $n \ge n_2$.
+
+Put $n_3 = \max(n_1, n_2)$ and $M = n_3(P+Q)$. Let $N \ge M$ and write
+$N = n(P+Q) + r$ with $0 \le r < P+Q$. Then $n(P+Q) \ge N - (P+Q-1) \ge M - (P+Q) + 1$,
+and since $n(P+Q)$ is a multiple of $P+Q$ that is $> (n_3 - 1)(P+Q)$, we get
+$n \ge n_3$.
+
+Hence by Lemma \ref{lem:tail} and the choice of $n_1, n_2$,
+\[
+\left| S_N^{(P,Q)} - L \right|
+\;\le\; \left| S_N^{(P,Q)} - S_{n(P+Q)}^{(P,Q)} \right|
++ \left| S_{n(P+Q)}^{(P,Q)} - L \right|
+\;<\; \frac{\epsilon}{2} + \frac{\epsilon}{2} \;=\; \epsilon .
+\]
+Since $\epsilon > 0$ was arbitrary, $S_N^{(P,Q)} \to L$.
+\end{proof}
+
+\medskip
+\noindent
+
+\section{conclusion}
+From the general result we can conclude that for the case of F(1,1) we get $ln2$ and for $F(2,1)$ we get $\frac{3}{2}ln2$. Both converges. Also any of these sequence with non-zero constant P,Q converges.
+
+\end{document}
