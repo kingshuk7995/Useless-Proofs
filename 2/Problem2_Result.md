@@ -161,9 +161,3 @@ $$\mathfrak R_S(\mathcal H)=\frac Bn\,\mathbb E_\sigma\Bigl\|\sum_i\sigma_ix_i\B
 The extra term does **not** vanish: $\mathbb E[T^2]=n$ exactly. Zero *variance* does not imply zero Rademacher contribution, because $\mathfrak R_S$ is driven by the **uncentered** Gram matrix, and a constant feature aligns perfectly with $\mathbf 1$ — the direction in which $\sigma$ has an $\Theta(\sqrt n)$ component. The intuition is valid for centered capacity measures (Gaussian width of centered data, PCA rank); the conjecture silently swaps a centered notion for an uncentered one, and the numerator moves in the **opposite** direction to the one asserted.
 
 ---
-
-## 6. Scope note
-
-For CNNs the paper does not concatenate constants — it **interleaves** them spatially (pixel $[i,j]\to[Ki,Kj]$, gaps filled with $0.5$), changing receptive-field geometry and effective stride. Problem 2 formalises the operation as concatenation $\tilde x=[x,c,\dots,c]$, which is literally the paper's PINN/QCD/FNN experiments (input $T\to(T,T_c)$; input $0.7\to[0.7,0.5]$) but *not* its CNN experiments. The results above resolve Problem 2 exactly as written; they do not by themselves settle the spatial-interleaving variant, which is a different operation and deserves separate treatment.
-
-Nothing here contradicts the paper's own thesis. The paper claims an **optimisation** effect (fewer degenerate states, smoother trajectories) and explicitly states the gains are *"not a result of increased model capacity"*. Problem 2 is an extrapolation to a **statistical-capacity** claim, and it is that extrapolation that fails.
