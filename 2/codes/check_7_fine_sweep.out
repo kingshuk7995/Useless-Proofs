@@ -1,0 +1,19 @@
+==============================================================================
+CHECK 7 - inside the window, is PADDING better than just ADDING A BIAS?
+  same dataset as Check 5. Compare, at matched 'bias reach':
+    padding  A      -> ellipsoid class {||w||^2 + b^2/A^2 <= B^2}
+    explicit beta   -> cylinder  class {||w||<=B, |b|<=beta}
+==============================================================================
+  baseline (no bias, no padding): ratio = 2.350360
+
+   A/beta   padding ratio      explicit-bias ratio
+   0.55    1.822419 (helps)   1.709403 (helps)   -> BIAS wins
+   0.6     1.793198 (helps)   1.697413 (helps)   -> BIAS wins
+   0.65    1.769223 (helps)   1.689045 (helps)   -> BIAS wins
+   0.7     1.750203 (helps)   1.684248 (helps)   -> BIAS wins
+   0.75    1.735793 (helps)   1.683118 (helps)   -> BIAS wins
+   0.8     1.725628 (helps)   1.685932 (helps)   -> BIAS wins
+   0.85    1.719347 (helps)   1.693237 (helps)   -> BIAS wins
+   0.9     1.716604 (helps)   1.709452 (helps)   -> BIAS wins
+   1.0     1.720461 (helps)   1.776658 (helps)   -> PADDING wins
+   1.1     1.734929 (helps)   1.857814 (helps)   -> PADDING wins

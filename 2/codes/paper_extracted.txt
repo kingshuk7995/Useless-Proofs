@@ -1,0 +1,963 @@
+                                    npj | artiﬁcial intelligence                                                                                                                        Article
+
+
+
+                                                                                                                                                     https://doi.org/10.1038/s44387-025-00010-0
+
+
+                                    Symmetry breaking in neural network
+                                    optimization: insights from input
+                                    dimension expansion
+                                                                                                                                                                                 Check for updates
+                                                       1,8               2,3,8              4                          2,3                   1                       4
+                                    Jun-Jie Zhang , Nan Cheng                 , Fu-Peng Li , Xiu-Cheng Wang , Jian-Nan Chen , Long-Gang Pang                              &
+                                    Deyu Meng5,6,7
+
+
+                                    Understanding how neural networks learn and optimize remains a central point in machine learning,
+                                    with implications for designing better models. While techniques like dropout and batch normalization
+
+1234567890():,;   1234567890():,;
+                                    are widely used, the underlying principles driving their success-such as symmetry breaking, a concept
+                                    in physics-are underexplored. We propose the symmetry breaking hypothesis, showing that breaking
+                                    symmetries during training (e.g., via input expansion) substantially improves performance across
+                                    tasks. We develop a metric to quantify symmetry breaking in networks, revealing its role in common
+                                    optimization methods and its connection to properties like equivariance. This metric offers a practical
+                                    tool to evaluate architectures without exhaustive training or full datasets, enabling more efﬁcient
+                                    design choices. Our work positions symmetry breaking as a unifying principle behind optimization
+                                    techniques, bridging theoretical gaps and providing actionable insights for improving model
+                                    efﬁciency.
+
+
+                                    Artiﬁcial intelligence (AI) has seen remarkable advancements over the past                 A particularly promising principle is symmetry breaking-a concept
+                                    decade, particularly in neural networks, which have revolutionized ﬁelds             deeply rooted in physics that describes how a system that is initially sym-
+                                    such as computer vision, natural language processing, and autonomous                 metric becomes asymmetric under certain conditions, leading to new and
+                                    systems1–5. These models have also made signiﬁcant strides in scientiﬁc              often more stable conﬁgurations15,16. In the context of neural networks,
+                                    computing and creative domains, enhancing areas like healthcare diag-                symmetry breaking17,18 can be thought of as a mechanism that helps the
+                                    nostics, weather forecasting, and art generation6–10.                                model escape from local minima and saddle points in the loss landscape19,20,
+                                         Despite these successes, the underlying mechanisms of these complex             thereby facilitating better optimization and generalization.
+                                    models remain poorly understood11. This lack of interpretability often forces              In this study, we propose treating symmetry breaking as a fundamental
+                                    researchers to rely on trial-and-error methods to improve model                      principle and describe its application in neural network optimization. Our
+                                    performance12. As neural networks grow in size and complexity, they                  investigation began with an intriguing empirical observation: expanding the
+                                    become increasingly difﬁcult to analyze and understand. The high dimen-              dimensionality of input pixels and ﬁlling the expanded dimensions with
+                                    sionality and intricate architectures of these networks pose signiﬁcant              constant values signiﬁcantly improves model performance across various
+                                    challenges for theoretical analysis. With the continuous growth in data and          datasets and tasks, including image classiﬁcation, Physics-Informed Neural
+                                    network parameters, achieving a deeper understanding of these models                 Networks (PINNs)21, image coloring, and sentiment analysis.
+                                    becomes both more difﬁcult and more crucial13.                                             To understand this phenomenon, we propose the hypothesis of sym-
+                                         Given the complexity and expense of directly modeling and analyzing             metry breaking and claim it to be a fundamental principle in neural network
+                                    neural networks, it is worth considering more efﬁcient approaches inspired           optimization. Our ﬁndings indicate that augmenting the input space with
+                                    by ﬁrst principles in scientiﬁc ﬁelds. One effective strategy is principle-based     additional dimensions of constant values mimics a symmetry breaking
+                                    modeling, which leverages foundational principles from various disciplines           process. This augmentation proves advantageous for network training, as it
+                                    to guide the development and optimization of neural networks14.                      facilitates smoother transitions in parameter values during gradient descent.
+
+
+                                    1
+                                     Northwest Institute of Nuclear Technology, Xi’an, Shaanxi, China. 2School of Telecommunications Engineering, Xidian University, Xi’an, Shaanxi, China. 3State
+                                    Key Laboratory of ISN, Xi’an, Shaanxi, China. 4Key Laboratory of Quark and Lepton Physics (MOE) & Institute of Particle Physics, Central China Normal University,
+                                    Wuhan, Hubei, China. 5School of Mathematics and Statistics and Ministry of Education Key Lab of Intelligent Networks and Network Security, Xi’an Jiaotong
+                                    University, Xi’an, Shaanxi, China. 6Macao Institute of Systems Engineering, Macau University of Science and Technology, Taipa, Macao, China. 7Pengcheng
+                                    Laboratory, Shenzhen, China. 8These authors contributed equally: Jun-Jie Zhang, Nan Cheng.       e-mail: lgpang@ccnu.edu.cn; dymeng@mail.xjtu.edu.cn
+
+
+                                    npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                         1
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                    Article
+
+     To further test and validate the symmetry breaking hypothesis, we          KMNIST, data expansion still led to noticeable improvements in accuracy.
+conducted a series of experiments comparing the loss landscapes of models       For datasets with higher classiﬁcation difﬁculty, like FGVC-Aircraft and
+trained with different techniques, including equivariance22, dropout23, and     DTD, the improvements were even more pronounced. Particularly note-
+batch normalization24. Our ﬁndings suggest that these techniques all adhere     worthy is the performance boost observed for FGVC-Aircraft and DTD,
+to the symmetry breaking principle in neural network optimization.              which are inherently challenging due to their high intra-class similarity and
+Moreover, we discovered that embedding equivariance into the network            textural complexity, respectively.
+design is a more effective approach than merely scaling up the network,
+highlighting a trend that deviates from the current focus on scaling laws.      Impact of dimension expansion on scientiﬁc tasks. To demonstrate
+     Finally, inspired by the “Parasi” scheme, which is used as a metric to     the effects of dimension expansion in the intersection ﬁeld of AI and
+measure the “replica symmetry" of spin-glass systems25,26 in physics, we        scientiﬁc discovery, we performed two examples based on PINNs—a
+developed a procedure to measure the “degree of symmetry breaking” for          hybrid approach that combines data-driven and physics-driven methods.
+the neural network without the need for complete datasets and extensive
+training processes. This measurement could serve as a metric to evaluate        Data-driven task—equation of state in quantum chromodynamics. Quan-
+neural network designs.                                                         tum Chromodynamics (QCD)35,36 is the fundamental theory that describes
+     Our work advances the theoretical understanding of neural network          the strong interaction between quarks and gluons. One of the key challenges
+optimization and provides practical tools and methodologies that can be         in QCD is to understand the equation of state (EoS) of the hot and dense
+widely applied to improve AI systems across various domains.                    QCD matter, which is crucial for explaining phenomena such as the early
+                                                                                universe and the heavy-ion collisions37–39. Presently, for the hot and dense
+Results                                                                         quark-gluon matter, the QCD EoS can only be obtained by Lattice QCD40,41
+Observation: input expansion brings performance enhancement                     calculations based on ﬁrst principles, which requires huge computational
+Impact of dimension expansion on image classiﬁcation. We begin by               effort.
+analyzing image classiﬁcation performance across various datasets,                    Here, we developed a quasi-particle model to reproduce the QCD EoS
+focusing on models primarily based on Convolutional Neural Network              at zero baryon chemical potential. Our approach utilizes three neural net-
+(CNN) architectures. Speciﬁcally, we compared the performance of                works to represent the temperature-dependent masses of quasi-quarks and
+models when fed with original data versus data that had undergone               quasi-gluons.
+dimension expansion. The datasets used in our experiments included                    The neural networks take temperature T as input and masses as out-
+CIFAR-10, CIFAR-100(https://www.cs.toronto.edu/kriz/cifar.html), and            puts. Given these masses, the physical quantities of pressure and energy
+ImageNet-R, ImageNet-100(https://www.image-net.org/). To ensure a               density can be obtained. Limited by the huge computational cost, we only
+comprehensive evaluation, we employed a range of network archi-                 have 50 points of pressure and energy density from Lattice QCD, hence the
+tectures, including ResNet-18 and ResNet-502 from the classic residual          task is a date-driven task with 50 Lattice QCD points.
+networks, DenseNet-12127 for deeper network analysis, and EfﬁcientNet28               Figure 3 shows the results for both expanded and unexpanded input
+and MobileNet-v329 to assess the impact on lightweight quantized net-           dimensions of the neural network. Here, “unexpanded” refers to using T as
+works. All network architectures adhered to the standard structures             the input, while “expanded” refers to using (T, Tc) as the input, with
+provided by Torchvision in PyTorch without any modiﬁcations. The                Tc = 0.155 GeV. We can see that the expanded input, labeled as s(T, Tc),
+dimension expansion technique involved enlarging each dimension of              demonstrates a signiﬁcant improvement over the unexpanded, particularly
+the image by a factor of two. In the expanded image, original pixels were       at lower temperatures.
+placed at evenly spaced intervals, with additional pixels set to a constant           The results indicate that incorporating additional input dimensions
+value of 0.5. This method ensured that the original image’s information         signiﬁcantly enhances the accuracy of the model. This improvement
+was preserved while introducing additional spatial context.                     underscores the importance of a more detailed representation of the input
+     Our ﬁndings, depicted in Fig. 1, reveal that all models exhibited          space in capturing the complex behavior of QCD matter.
+improved convergence performance in image classiﬁcation when input data
+dimensions were expanded. This improvement was reﬂected in faster               Physics-driven tasks—solving partial differential equations. We evaluated
+training convergence speeds across models, demonstrating the broad              the impact of input dimension expansion on solving various PDEs using
+applicability of dimension expansion for enhancing model performance.           PINNs. The experiments were conducted on a comprehensive set of 20
+Notably, after data expansion, the classiﬁcation accuracy of ResNet-18 on       PDEs. For each PDE, we expanded the input dimensions by including
+CIFAR-10 soared to 94%, rivaling that of the larger ResNet-1012. This result    additional constant values derived from the mean of the original input
+underscores the signiﬁcant performance gains achieved through image             variables. For instance, for a one-dimensional problem with inputs [x, t], we
+dimension expansion, highlighting its potential to enhance CNN perfor-          expanded it to [x, xc, x, xc, x, t, tc, t, tc, t], where xc and tc are the mean values of
+mance across various architectures and datasets.                                x and t, respectively.
+     To further investigate the relationship between data expansion and the           To analyze the performance of the input expansion method, we
+intrinsic features of the image datasets, we extended our analysis to include   compared our results with the benchmark provided by the PINNacle
+additional datasets covering a broader spectrum: including grayscale data-      framework42, as shown in Fig. 4. The improvement was evidenced by the
+sets such as KMNIST30 and FashionMNIST31, thus avoiding any bias                distribution of the loss values, where the expanded input dimensions
+introduced by using solely three-channel color images like CIFAR and            resulted in a lower overall loss compared to the raw input dimensions. Our
+ImageNet. Given the extensive use of image classiﬁcation in satellite remote    ﬁndings revealed that ~75% of the PDEs showed improved performance
+sensing, we incorporated the EuroSAT dataset32. Additionally, we selected       with the expanded input dimensions. This improvement was particularly
+FGVC-Aircraft33 for its focus on classifying speciﬁc aircraft models, which     signiﬁcant for complex and high-dimensional PDEs, demonstrating the
+involves distinguishing between highly similar classes, thereby testing the     effectiveness of input dimension expansion in enhancing the accuracy and
+model’s feature extraction capabilities. Lastly, the DTD dataset34, which       robustness of PINNs (the remaining 5 PDEs showed no signiﬁcant
+categorizes textures, was chosen to further validate model performance.         improvement, so they were not included in Fig. 4).
+This variety ensures a comprehensive evaluation of the effectiveness of the
+data expansion technique across different types of image data.                  Impact of dimension expansion on other tasks
+     Our results, as shown in Fig. 2, demonstrated that data expansion          Text classiﬁcation. For synthetic sentiment classiﬁcation tasks, we compared
+consistently enhances classiﬁcation performance across all tested datasets.     two Transformer models with controlled parameter budgets. The baseline
+Even for datasets where the baseline accuracy was already high, such as         model used 32-dimensional embeddings and a 1211-dimensional hidden
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                                2
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                 Article
+
+                                   CIFAR-10             CIFAR-100                          ImageNet-R                          ImageNet-100
+
+
+
+      ResNet-18   Accuracy(%)
+
+
+
+
+      ResNet-50
+                     Accuracy(%)
+
+
+
+
+      DenseNet-121
+                     Accuracy(%)
+
+
+
+
+      MobileNet-v3
+                     Accuracy(%)
+
+
+
+
+      EfficientNet
+                     Accuracy(%)
+
+
+
+                                      Epoch                      Epoch                               Epoch                                Epoch
+Fig. 1 | Performance comparison for raw data and expanded data on CIFAR and       121, MobileNet-v3, and EfﬁcientNet. Within each cell, the plot shows two curves
+ImageNet datasets with various models. Each row represents a different dataset:   representing test accuracy over epochs: the red curve for expanded data and the blue
+CIFAR-10, CIFAR-100, ImageNet-R, and ImageNet-100, respectively. Each column      curve for raw data.
+corresponds to a different model architecture: ResNet-18, ResNet-50, DenseNet-
+
+
+layer, while the expanded variant employed 64-dimensional embeddings              compression-can enhance feature representation capacity, potentially
+(constructed via feature replication and mean-value padding) paired with a        enabling more efﬁcient parameter utilization in Transformer architectures
+reduced 512-dimensional hidden layer. This conﬁguration maintained                for sentiment analysis tasks.
+near-identical parameter counts despite expanding the input dimensions,
+intentionally preserving structural comparability while testing dimensional       Image coloring. In the task of image coloring, where the goal is to col-
+redistribution effects. Both architectures retained 8 attention heads and 2       orize black-and-white images, we used a generative model based on
+encoder layers for controlled experimentation.                                    conditional diffusion to restore grayscale images to color RGB maps with
+     After 20 epochs, the dimension-expanded model demonstrated                   a human-face-based CelebA dataset43. By both expanding the input
+superior performance with 96.73% test accuracy (vs. 90.17% for baseline)          dimension of the noisy image, which is used to denoise as a color image,
+and faster convergence (train loss: 0.2457 vs. 0.4572). Notably, the expanded     and the grayscale image, which is used as the prompt of the diffusion, we
+model achieved these gains with 0.07% fewer parameters, challenging the           observed a modest improvement in performance. Speciﬁcally, the mean
+assumption that pure parameter quantity drives performance. This suggests         absolute error (MAE) of the colorization model was reduced from
+that strategic dimensional expansion-even when offset by hidden layer             8.7 × 10−3 to 8.3 × 10−3. This result demonstrates the effectiveness of
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                             3
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                         Article
+
+Fig. 2 | Performance comparison for raw data and
+expanded data on various datasets using ResNet-
+18. Each bar represents the test accuracy, with blue
+bars indicating the accuracy for raw data and red
+bars showing the additional accuracy gained from
+using expanded data. The total length of each bar
+(blue plus red) represents the ﬁnal test accuracy after
+applying dimension expansion. Up-arrows next to
+each dataset indicate the accuracy increment
+achieved through dimension expansion, with the
+numerical values beside the arrows quantifying the
+improvement.
+
+
+
+
+Fig. 3 | Comparison of the predicted QCD state
+equation results with expanded (black scatter) and
+unexpanded (red scatter) input dimensions.
+A, B show the mean absolute error of the normalized
+pressure (P/T4) and energy density (E/T4) as func-
+tions of the temperature. The critical temperature
+Tc = 0.155 GeV.
+
+
+
+
+input dimension expansion in enhancing neural network performance            transitions and spin-spin interactions. The Ising model is deﬁned on a
+in image coloring.                                                           two-dimensional periodic lattice, typically arranged in a square
+                                                                             grid, as depicted in Fig. 5A. Each lattice point is assigned a spin vari-
+Sentiment analysis. For sentiment analysis tasks using the IMDB dataset44,   able, which can be either spin-up (denoted by +1) or spin-down
+we explored the impact of expanding input dimensions on model perfor-        (denoted by _1).
+mance. We modiﬁed a BERT-based model45 by doubling the embedding                  In the absence of an external magnetic ﬁeld, the Ising model
+dimension through an additional linear layer, then mapping it back to the    exhibits what is termed “energetic symmetry”. This implies that dif-
+original size to maintain compatibility with the Transformer architecture.   ferent conﬁgurations of spins (i.e., various arrangements of +1 and −1
+This approach allowed us to test the effect of increased input dimensions    spins on the lattice) can result in the same total energy for the system.
+without altering the overall model structure.                                This is because the system’s energy E of a conﬁguration is determined
+     The results showed a modest improvement in accuracy, increasing         by the interactions between neighboring spins, mathematically
+from 83.40% to 83.67%, highlighting the potential beneﬁts of input           expressed as:
+dimension expansion in enhancing the performance of sentiment analysis                                             X
+models.                                                                                                   E ¼ J       si sj ;                      ð1Þ
+                                                                                                                     hi;ji
+Mechanism: exploring the symmetry breaking hypothesis in
+neural networks                                                              where J is the interaction strength between neighboring spins, si and sj are the
+Symmetry breaking mechanism in the ising model. In physics,                  spin values at lattice points i and j, and the sum is over all pairs of neigh-
+symmetry breaking16 is a fundamental concept that elucidates how             boring spins. In this equation, since the value of sisj remains unchanged
+systems initially exhibiting symmetry can lose this symmetry due to          when all spins are ﬂipped (changing +1 to −1 and vice versa), the system’s
+changes in external conditions or internal interactions. Here, we delve      total energy remains constant, reﬂecting the system’s symmetry.
+into the two-dimensional Ising model46, a widely utilized stochastic               However, when an external magnetic ﬁeld h is introduced, this energy
+process model in physics, primarily employed to study phase                  symmetry is disrupted. The interaction between the ﬁeld and the spins adds
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                    4
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                                                                                        Article
+
+Fig. 4 | Comparison of loss distributions for 15                                                     (A)                                                                                           (B)
+PDEs using raw and expanded input dimensions.                                                  1.0         Raw                                                                               1.0         Raw
+                                                                                                           Expand                                                                                        Expand
+Each subﬁgure represents the results for 5 different
+PDEs. The loss values have been normalized using                                                                                                                                             0.9
+                                                                                               0.8
+
+
+
+
+                                                                     Loss value (normalized)                                                                       Loss value (normalized)
+the maximum loss for each PDE to facilitate com-                                                                                                                                             0.8
+parison. The blue distribution on the left side of each
+violin plot represents the raw input dimensions,                                                                                                                                             0.7
+                                                                                               0.6
+while the light red distribution on the right side
+                                                                                                                                                                                             0.6
+represents the expanded input dimensions. The
+plots show the distribution of loss values across                                                                                                                                            0.5
+                                                                                               0.4
+different random seeds, with the expanded input
+dimensions generally resulting in lower loss values,                                                                                                                                         0.4
+indicating improved performance. The three panels                                              0.2                                                                                           0.3
+A, B, and C, each grouping the ﬁve equations, den-
+monstrate the beneﬁt of dimension expansion.                                                                                                                                                 0.2
+                                                                                                                      Equations                                                                                       Equations
+                                                                                                                                                          (C)
+                                                                                                                                                    1.0                                                      Raw
+                                                                                                                                                                                                             Expand
+
+
+
+
+                                                                                                                          Loss value (normalized)
+                                                                                                                                                    0.8
+
+
+
+                                                                                                                                                    0.6
+
+
+
+                                                                                                                                                    0.4
+
+
+
+                                                                                                                                                    0.2
+
+                                                                                                                                                                Equations
+
+
+
+
+Fig. 5 | Ising model. A Schematic diagram of the
+Ising model composed of a two-dimensional peri-
+odic lattice, typically arranged in a square grid. Each
+lattice point represents a spin variable, where spin-
+up is denoted by +1 and spin-down by −1. B The
+energy landscape of the Ising model. The two curves
+represent the energy landscape for h = 0 and
+h = 0.45. When h = 0.45, the symmetry of the system
+is broken.
+
+
+
+
+a new term to the energy equation:                                                                                           conﬁguration where all spins are down (−1). However, with a positive
+                                                                                                                             external magnetic ﬁeld, the energy of the all-up conﬁguration will be lower
+                                      X                   X                                                                  than the all-down conﬁguration, breaking the symmetry. This is depicted in
+                            E ¼ J            si sj  h       si :                                                  ð2Þ
+                                      hi;ji               i                                                                  Fig. 5 (B), where the energy landscape changes when h = 0.45, showing the
+                                                                                                                             breaking of symmetry. Since the number of the total spin conﬁgurations is
+     The second term—h∑isi represents the interaction between the spins                                                      225 which is too large to compute, we randomly sampled 1000 conﬁgurations
+and the external magnetic ﬁeld. This term depends on the orientation of                                                      for presentation.
+each spin relative to the ﬁeld: spins aligned with the ﬁeld (e.g., +1 if h is                                                      Understanding symmetry breaking in the Ising model provides a
+positive) will lower the energy, while spins opposed to the ﬁeld will increase                                               foundation for exploring similar concepts in neural networks, where sym-
+the energy. As a result, the previously equivalent energy states of different                                                metry breaking emerges as a crucial factor in optimization and learning
+spin conﬁgurations are now differentiated by their alignment with the ﬁeld,                                                  processes.
+resulting in symmetry breaking.
+     To illustrate, consider a simple 5 × 5 lattice. Without an external ﬁeld,                                               Symmetry breaking in neural networks. We introduce the concept of
+the energy of the conﬁguration where all spins are up (+1) is the same as the                                                symmetry breaking in modern neural networks, such as transformers and
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                                                                                                 5
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                 Article
+
+CNNs, by relating the Ising model to the Hopﬁeld neural network. We                 and Fig. 5, the concept of symmetry breaking is also applicable to modern
+then demonstrate that dimension expansion in these neural networks can              Hopﬁeld networks and hence to transformer architectures. This effect of
+be interpreted as a symmetry-breaking procedure.                                    adding bias in transformers is also reported in literature, which states that
+                                                                                    the bias term of the value linear transformation plays a signiﬁcant role in
+Ising model to Hopﬁeld neural network. Hopﬁeld Networks, introduced by              reducing the loss function55, further supporting the symmetry-breaking
+John Hopﬁeld in 1982, are designed to associate an input with its most              hypothesis.
+similar pattern47,48. The purpose of Hopﬁeld neural networks is to store and             For CNN-like architectures, the analogy is straightforward: by applying
+retrieve patterns. For instance, if there are N patterns, each denoted as xi with   sparse attention matrices, introducing parameter sharing, and employing
+xi ∈ {−1, 1}d and d being the length of the patterns, these patterns can be         hierarchical window designs, the transformer can be strictly degenerated
+encoded by the weight matrix W, deﬁned as:                                          into a CNN-like structure. This further conﬁrms the applicability of sym-
+                                           X                                        metry breaking to CNN-like architectures, as reported by the dimension
+                                  W¼             xi xiT ;                    ð3Þ
+                                                                                    expansion examples.
+                                             i
+                                                                                    Dimension expansion is a symmetry breaking process. To see the effect of
+where xi xiT is the outer product.                                                  dimension expansion, we expand the dimension of the input ξ and pattern xi
+     Given a state ξ, which contains partial information of the stored pat-         in Eq. (7) explicitly,
+terns, we can retrieve the complete pattern using the basic synchronous
+update rule:                                                                                              ξ ¼ fξ 1 ; ξ 2 ; :::; ξ n g
+                                                                                                            ! fξ 1 ; ξ 0 ; ξ 2 ; ξ 0 ; :::; ξ n ; ξ 0 g;
+                              ξ tþ1 ¼ sign ðWξ t Þ:                          ð4Þ                                                                              ð10Þ
+                                                                                                         xi ¼ fx1i ; x2i ; :::; xni g
+When convergence is reached, ξ tþ1 ¼ ξ t .                                                                  ! fx1i ; x0i ; x2i ; x0i ; :::; xni ; x0i g;
+     The update rule in Eq. (4) minimizes the energy function, which takes
+the exact form of the Ising model but extends the interactions from local to        where ξ0 and x0i are the constants used to expand the input dimensions.
+global:                                                                             Substituting Eq. (10) into Eq. (7) (neglect the bias term), we obtain,
+                                       1
+                                  E ¼  ξ T Wξ:                              ð5Þ                    1P T                   2
+                                       2                                                        E¼      ðx ξ þ x0i ξ T0 Þ
+                                                                                                    2 i i
+     In practical applications, a bias is usually introduced in Eq. (5) to break                     1 P T 2                 2
+                                                                                                                                                
+the symmetries in the energy landscape for fast convergence49,50, which has                       ¼      ðxi ξÞ þ ðx0i ξ T0 Þ þ 2xiT ξx0i ξ 0T               ð11Þ
+                                                                                                     2 i
+the same mathematical root as in Eq. (2) and Fig. 5:
+                                                                                                     1P T 2            P              1P 0 T 2
+                                                                                                  ¼     ðx ξÞ  ξ xiT x0i ξ 0T              ðx ξ Þ
+                                1                                                                    2 i i               i            2 i i 0
+                           E ¼  ξ T Wξ þ ξ T b:                             ð6Þ
+                                2
+                                                                                    Comparing Eq. (11) with Eq. (7), we see that expanding the dimension of the
+From Hopﬁeld neural network to transformer/CNN. Substituting Eq. (3)                input is indeed equivalent to adding the bias terms in classical Hopﬁeld
+into Eq. (6), we rewrite the energy function as:                                    network - hence, breaks the symmetry of the network. For modern Hopﬁeld
+                                                                                    network, if we expand the exponential term into polynomials, we can always
+                              1 P                                                   ﬁnd a term of the form “ξ ⋅ constant_vector”, which takes the effect of
+                         E ¼  ξ T xi xiT ξ þ ξ T b
+                              2    i                                                symmetry breaking. Since the attention mechanism and CNN are related to
+                                                                             ð7Þ
+                              1P T 2                                                the Hopﬁeld network, we can conclude that dimension expansion is a
+                          ¼      ðx ξÞ þ ξ T b:                                    symmetry breaking process for transformer and CNN. Note, that there are
+                              2 i i
+                                 2
+                                                                                    many approaches to break the symmetry, and dimension expansion is one
+     The quadratic term ðxTi ξÞ can be generalized to any function                  of the many effective ways. We will illustrate the fact later.
+Fðxi ξÞ . For instance, if F(x) = x2, it corresponds to the classical Hopﬁeld
+    T 51,52
+                                                                                          To demonstrate that the additional dimension in the input breaks the
+network, and if F(x) = ex, it represents a network with exponential Pstorage        symmetry, we perform an example of number classiﬁcation with a neural
+                                                                         T 2
+capacity53. To
+            P  match the transformer   architecture, we replace  1
+                                                                  2  i ðxi ξÞ       network whose parameters take values of either −1 or 1. A random number
+                                                                1 T
+with  log i exp ðxi ξÞ and introduce a normalization term 2 ξ ξ:
+                     T
+                                                                                    between 0 and 1 is chosen and classiﬁed as category “0” if it is smaller than
+                                                                                    0.5, and as category “1” otherwise. We considered two scenarios with two
+                              X                    1
+                  E ¼  log           exp ðxiT ξÞ þ ξ T ξ þ ξ T b:           ð8Þ    four-layer neural networks.
+                                  i
+                                                   2                                      The inﬂuence of incorporating an additional dimension is illustrated in
+                                                                                    Fig. 6A. This ﬁgure demonstrates that the introduction of the additional
+     It can be derived that the update rule to minimize Eq. (8) takes the
+                                                                                    dimension leads to a reduction in the number of degenerate states-deﬁned as
+following form54:
+                                                                                    distinct parameter conﬁgurations that produce identical loss values. Con-
+                                      X                                             sequently, this results in a smoother training trajectory and diminishes the
+                        ξ tþ1 ¼           xi softmax ðxiT ξ t Þ:             ð9Þ    probability of the network becoming trapped in local minima. A similar
+                                      i
+                                                                                    phenomenon is also observed when the network contains a bias vector in the
+      Since in most scenarios, the attention mechanism does not contain the         linear layers (Fig. 6B).
+bias term, we also neglect the bias term ξTb in Eq. (8) to connect it with the            Thus, the introduction of an additional input dimension can break the
+attention mechanism. The update rule in Eq. (9) is exactly equivalent to the        symmetry in neural networks, similar to how an external magnetic ﬁeld
+dot-product attention when applied once. Thus, we see that the modern               breaks the symmetry in the Ising model. This symmetry breaking can lead to
+Hopﬁeld network shares the same mathematical structure with the trans-              a smoother training process and reduce the likelihood of the network getting
+former architecture. Since the bias term ξTb (also named as currents52 to           stuck in local minima, thereby improving the overall performance of the
+spike the neurons) in Eq. (8) breaks the symmetry similarly to that in Eq. (2)      neural network.
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                          6
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                  Article
+
+Fig. 6 | Comparison of MSE Loss values with dif-
+ferent weights for binary classiﬁcation (random
+number). The horizontal axis represents different
+weight combinations, and the vertical axis repre-
+sents the MSE loss. The MSE loss values are sorted in
+descending order before plotting, so the weight
+combinations on the horizontal axis do not corre-
+spond to the same weights across different scenarios.
+Subﬁgures (A, B) correspond to comparisons
+without and with the bias in the linear layers,
+respectively.
+
+
+
+
+Evidence and metric: symmetry breaking techniques and its
+measurement
+Symmetry breaking effects of equivariance, dropout, and batch
+normalization. To investigate the symmetry-breaking effects of
+equivariance22, dropout23, and batch normalization24 in neural networks,
+we conducted a series of controlled experiments using a simple CNN
+architecture. We compared the performance of ﬁve different network
+conﬁgurations: a baseline CNN, a CNN with dropout, a CNN with batch
+normalization, a CNN with equivariance constraints, and a CNN with
+incorrect symmetry embedded in the structure (wrong equivariance).
+      We constructed a synthetic dataset consisting of 12 binary images, each
+of size 2 × 2 pixels, with corresponding binary labels. The images were
+designed to exhibit simple patterns with pixel values of −1, 0, or 1, and are
+invariant under 180° rotations and ﬂips but not under 90° rotations—a
+property crucial for evaluating the effects of equivariance in neural net-
+works. The labels were assigned based on the presence of speciﬁc patterns in
+the images, creating a binary classiﬁcation task.                                Fig. 7 | Loss values with different weights of binary classiﬁcation (four pixel
+      We generated all possible combinations of weights for the convolu-         images) for cases: a baseline CNN, a CNN with dropout, a CNN with batch
+tional and fully connected layers, with each weight taking values of either −1   normalization, a CNN with equivariance constraints, and a CNN with wrong
+or 1. This exhaustive search allowed us to evaluate the loss landscape           equivariance. The horizontal axis represents different weight combinations, where
+comprehensively.                                                                 each number corresponds to a speciﬁc set of weights. The vertical axis represents the
+      To assess the symmetry-breaking effects, we compared the loss values       loss values, which are sorted in descending order before plotting, so the weight
+across the different network conﬁgurations. The results of our experiments       combinations on the horizontal axis do not correspond to the same weights across
+are summarized in Fig. 7. The ﬁgure shows the sorted loss values for each        different scenarios. The Baseline ConvNet shows a plateau region (x-axis between
+                                                                                 1.5 and 2.9) where the loss remains constant despite different weight combinations,
+network conﬁguration, highlighting the impact of dropout, batch normal-
+                                                                                 indicating a symmetry in these weight combinations from the perspective of loss
+ization, and equivariance on the loss landscape.
+                                                                                 values. Adding dropout and batch normalization disrupts this plateau in the loss
+      Our ﬁndings indicate that there are two primary approaches to break        landscape, helping to avoid optimization getting stuck in these ﬂat regions. For the
+such symmetry: splitting the degenerated states as seen in dropout, batch        cases with equivariance constraints, the number of weight combinations is reduced
+normalization, or reducing the number of parameter combinations, as seen         compared to other scenarios. This reduction is due to the introduction of equivar-
+in the equivariance cases.                                                       iance, which eliminates the need to consider many redundant weight combinations.
+      Among these methods, equivariance stands out as a more efﬁcient            As a result, the curves for the equivariant and wrong equivariant constraints are
+approach compared with dropout and batch normalization. By embedding             shorter along the horizontal axis. Both equivariant and wrong equivariant con-
+symmetry constraints directly into the network architecture, equivariance        straints also break the degeneracy by reducing the number of states. Additionally, the
+reduces the complexity of the parameter space, leading to a more stream-         wrong equivariant constraint fails to converge to the minimum loss value.
+lined and effective training process. This observation suggests that incor-
+porating symmetry principles into network design could be a promising
+direction for future research, potentially offering advantages when applied
+together with various regularization techniques or increasing network size.      Wasserstein distance between different weight conﬁgurations of the
+      Meanwhile, our experiments also reveal a critical insight: embedding       network (i.e., replicas), providing insights into the extent of symmetry
+incorrect symmetry into the network can prevent convergence to the               breaking. We applied the RD Metric to the CIFAR-10 dataset using ﬁve
+optimal solution. This underscores the importance of identifying and             distinct neural network architectures: SimpleCNN, DropoutCNN,
+embedding the correct symmetries, which requires a deep understanding of         BatchNormCNN, FlipEquivarianceCNN, and RotationEquivar-
+the underlying data and problem domain.                                          ianceCNN (180 degrees), analogous to that in Fig. 7. Here, it is important
+                                                                                 to note that the CIFAR-10 dataset does not exhibit 180-degree rotational
+Measuring the degree of symmetry breaking. To quantify the degree                equivariance, which makes the rotation constraint less appropriate.
+of symmetry breaking in neural networks, we developed a metric called                 After training the test accuracies were recorded for each epoch and are
+the “Replica Distance (RD) Metric”. This metric evaluates the                    shown in Fig. 8A, where we see that the FlipEquivarianceCNN achieved the
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                              7
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                    Article
+
+
+
+
+Fig. 8 | Measuring the degree of neural network symmetry via the “Parassi”           trained models. The peak position (value at the x-axis) of the histogram serves as a
+scheme. A Test accuracies for different neural network architectures on the CIFAR-   measure of the degree of symmetry breaking.
+10 dataset. B Histogram of Wasserstein distances between weight distributions of
+
+
+
+highest test accuracy, followed by DropoutCNN, BatchNormCNN, Sim-                    Discussion
+pleCNN, and RotationEquivarianceCNN.                                                 Our research into symmetry breaking within neural networks provided
+      To measure the degree of symmetry breaking, we used a subset of                insights for neural network optimization, revealing how carefully controlled
+100 images from the CIFAR-10 dataset, a scenario that is common in                   disruptions in input spaces and optimization landscapes can systematically
+network design because we do not want to use the entire dataset during               enhance model performance. By linking theoretical analogies with empirical
+the design and selection phase. Analogous to the “Parassi” scheme used               validation across a wide array of tasks, spanning from image classiﬁcation to
+to determine the replica symmetry of the spin-glass system25,26, we                  physics-informed modeling, we establish symmetry breaking as a unifying
+trained each model for 200 epochs under 200 different random seeds,                  concept for network design and training.
+and the ﬁnal weights were cached. Thus, each model has 200 different
+weight combinations.                                                                 Key mechanisms of symmetry breaking
+      The degree of symmetry breaking was then quantiﬁed by calculating              A central ﬁnding of our study is that input dimension expansion, the process
+the Wasserstein distance between the weight distributions of the trained             of adding constant value dimensions to the input space, deliberately breaks
+models. The Wasserstein distance is a measure of the distance between two            symmetry, thereby enhancing both optimization dynamics and general-
+probability distributions, which in this context helps us understand how             ization capabilities. Across diverse architectures such as ResNets, Dense-
+different the weight distributions are after training under different initial        Nets, and Transformers, and across tasks like CIFAR image classiﬁcation,
+conditions (random seeds). A larger Wasserstein distance indicates greater           solving partial differential equations (PDEs), and sentiment analysis, this
+variability in the weight conﬁgurations, which corresponds to a higher               technique led to consistent improvements in accuracy. For instance, in the
+degree of symmetry breaking.                                                         CIFAR-10 image classiﬁcation task using a ResNet-18 architecture,
+      For each network model, we paired these 200 different weight                   expanding the input dimensions by a factor of 4 increased the accuracy to
+combinations (so we have C2200 ¼ 19900 pairs) and calculated the                     94.74%. In the CIFAR-100 dataset with the same architecture at the same
+Wasserstein distance for each pair. These obtained distances manifest                expansion factor, the accuracy reached 77.55%. This improvement stems
+the replica symmetry of the network structure. With these 19900 values,              from resolving degenerate weight conﬁgurations. The additional dimen-
+we then plotted the histograms of these distances and applied Gaussian               sions offer new degrees of freedom, which smooths the loss landscape and
+smoothing to obtain smooth curves. These smoothed histograms were                    reduces the model’s dependence on random initialization to avoid saddle
+normalized to form probability density functions. The ﬁve models                     points. This phenomenon is analogous to the Ising model in statistical
+correspond to ﬁve histogram curves (Fig. 8B). The mean value of the                  mechanics, where symmetry breaking perturbations help stabilize phase
+probability density was used as the metric. A higher average distance                transitions. In neural networks, this equates to more reliable convergence
+indicates a greater degree of symmetry breaking. The FlipEquivar-                    towards favorable minima.
+ianceCNN exhibited the highest degree of symmetry breaking, followed                       It’s important to note that symmetry breaking is not limited to explicit
+by RotationEquivarianceCNN, DropoutCNN, BatchNormCNN, and                            input manipulation. Techniques such as batch normalization, dropout, and
+SimpleCNN.                                                                           equivariant architectures also implicitly disrupt symmetric states, but with
+      Interestingly, despite its high degree of symmetry breaking, the Rota-         varying levels of effectiveness. Equivariance constraints, which incorporate
+tionEquivarianceCNN showed the lowest test accuracy. This can be                     task-speciﬁc symmetries (for example, rotational invariance in vision tasks),
+attributed to the fact that the CIFAR-10 dataset does not exhibit 180-degree         were found to be particularly potent, providing both structural guidance and
+rotational equivariance, making the rotation equivariance constraint inap-           ﬂexibility. To measure these effects, we developed a metric based on the
+propriate. In contrast, the FlipEquivarianceCNN, which leverages hor-                Wasserstein distance that quantiﬁes the divergence of weight distributions.
+izontal ﬂip equivariance, achieved the highest test accuracy, demonstrating          This metric offers a scalable way to evaluate the intensity of symmetry
+the effectiveness of appropriate equivariant constraints.                            breaking.
+      Our proposed metric suggests a way to measure the degree of
+symmetry of neural networks. By analyzing the Wasserstein distance                   Performance dynamics of input expansion
+between weight distributions, we can quantify the extent to which                    Our systematic experiments uncovered intricate relationships between
+different techniques, such as input dimension expansion, dropout,                    expansion factors (Table 1), ﬁlling strategies (Table 2), and network
+batch normalization, and equivariance constraints, break symmetry in                 architecture. Optimal performance improvements were observed at
+the parameter space. This metric can guide the design of neural net-                 moderate expansion levels (factors of 3–4). Beyond this range, the
+work architectures and optimization strategies, helping to improve                   beneﬁts started to level off due to diminishing representational returns
+model performance and generalization.                                                or architectural bottlenecks. For example, MobileNet-v3, which has
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                                8
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                                               Article
+
+Table 1 | Test accuracy (%) across expansion factors (K) for CIFAR-10/100
+
+ Model                                   Dataset                             Expansion Factor (K)
+                                                                             1                              2                         3                        4                         5
+ ResNet-18                               CIFAR-10                            90.16                          94.03                     94.61                    94.74                     94.66
+                                         CIFAR-100                           64.28                          74.70                     76.36                    77.55                     77.02
+ DenseNet-121                            CIFAR-10                            88.72                          93.68                     94.11                    -                         -
+                                         CIFAR-100                           62.54                          73.14                     75.41                    -                         -
+ MobileNet-v3                            CIFAR-10                            80.92                          87.37                     89.04                    -                         -
+                                         CIFAR-100                           50.91                          62.63                     63.36                    -                         -
+ EfﬁcientNet                             CIFAR-10                            87.67                          91.73                     92.44                    -                         -
+                                         CIFAR-100                           59.45                          69.90                     71.02                    -                         -
+The maximum ehancements are labeled in bold.
+Note: “-” indicates conﬁgurations prevented by architectural constraints (e.g., kernel size limitations).
+
+
+
+
+Table 2 | Impact of ﬁlling strategies on ResNet-18 (K = 5)                                                  such as those using batch normalization in sentiment analysis models,
+                                                                                                            showed smaller improvements. This is because their parameter spaces
+ Filling Strategy                              CIFAR-10                               CIFAR-100             already minimize redundant symmetric states. Similarly, tasks like PDE
+ 0 (Min value)                                 92.74                                  75.48                 solving and image coloring showed limited gains when the original net-
+ 0.25                                          92.86                                  74.91                 works were well-optimized, emphasizing the importance of aligning the
+ 0.5 (Mean)                                    94.66                                  77.02                 architecture with the task.
+                                                                                                                  Future research could concentrate on three interrelated areas. First,
+ 1 (Max)                                       92.60                                  74.11
+                                                                                                            reﬁning the symmetry breaking metric to be applicable to a wide range of
+ Random ∈ [0,1]                                91.56                                  66.39                 architectures and datasets is crucial. The current metric depends on several
+ No expansion                                  90.16                                  64.28                 parameters and can be unstable depending on the random seeds used.
+The maximum ehancements are labeled in bold.                                                                Developing an alternative, more comprehensive formulation of the metric
+                                                                                                            would capture more aspects of the loss landscape, providing more detailed
+                                                                                                            insights into symmetry breaking. Second, validating the approach on larger-
+smaller initial kernels compared to ResNet (3 × 3 vs. 7 × 7), reached its                                   scale benchmarks such as ImageNet and domain-speciﬁc scientiﬁc datasets
+peak performance at a lower expansion factor (K = 3). This highlights                                       will help determine its generalizability, especially for tasks with inherent
+the necessity of architecture-aware strategies for input dimension                                          physical symmetries, like ﬂuid dynamics modeling. Third, creating adaptive
+expansion. Regarding ﬁlling strategies for the expanded dimensions,                                         expansion protocols that can dynamically adapt to the architectural capa-
+using a mean value (such as 0.5) proved to be the most effective. In a                                      city, such as designing kernels that are sensitive to input dimensions in
+ResNet-18 architecture with an expansion factor of K = 5, mean-value                                        CNNs or enabling embedded equivariance learning in Transformers—
+ﬁlling led to improvements of 4.5 percentage points on the CIFAR-10                                         could reduce computational overhead while maximizing the beneﬁts of
+dataset and 12.74 percentage points on the CIFAR-100 dataset, when                                          symmetry breaking.
+compared to the unexpanded baselines. Random ﬁlling showed sig-                                                   By presenting symmetry breaking as both a theoretical concept and
+niﬁcant variability, especially on the CIFAR-100 dataset, indicating that                                   a practical design tool, we connect the fundamental understanding of
+structured initialization is crucial for stable symmetry breaking.                                          neural network geometry with actionable insights for enhancing model
+Boundary values (0 or 1) had moderate performance.                                                          robustness and efﬁciency. As datasets and architectures continue to grow
+     Importantly, the performance enhancements were not a result of                                         in size and complexity, mastering the art of controlled symmetry per-
+increased model capacity. In CNNs, expanding the input dimensions by a                                      turbation may be essential for driving the next wave of advancements in
+factor of 2 increased the parameter count by less than 3%. In Transformers,                                 machine learning.
+when we doubled the input embeddings while halving the hidden layers in
+the sentiment classiﬁcation task, we maintained a comparable parameter                                      Methods
+count but still achieved a 6.56% improvement in accuracy. This conﬁrms                                      Methodology for expanding input dimensions in image
+that the beneﬁts primarily stem from symmetry breaking rather than an                                       classiﬁcation
+increase in capacity. This is also consistent with our loss landscape analyses                              In identify the symmetry breaking principle, we coincidentally found a
+(as shown in Fig. 6), where expanded inputs reduced degenerate states even                                  method that enhances image classiﬁcation performance by expanding the
+in models with a ﬁxed number of parameters.                                                                 spatial dimensions of input images. This approach involves ﬁlling
+                                                                                                            the expanded positions with a ﬁxed value, followed by a careful design of the
+Challenges and pathways for advancement                                                                     neural network architecture to manage the increased dimensionality. For
+Despite the promise of this approach, there are limitations. Excessive input                                instance, if the original image is N × N pixels, we expand it by a factor of K as
+expansion leads to increases in computational costs without proportionate                                   an image with NK × NK pixels. In this NK × NK image, for example, the
+improvements in performance. In CNNs, expanding spatial dimensions                                          original pixels of [0, 0], [0, 1], [0, 2], ⋯ , [1, 0], [1, 1], ⋯ , [N, N] are positioned
+beyond 4–6 times the original size (for example, scaling 32 × 32 to                                         at coordinates as [0, 0], [0, K], [0, 2K], ⋯ , [K, 0], [K, 2K], ⋯ , [N(K − 1),
+128 × 128) resulted in only marginal gains in accuracy, despite a substantial                               N(K − 1)], while the remaining positions are ﬁlled with the value 0.5 (an
+increase in memory usage. In Transformers, naively expanding input                                          example is shown in Fig. 9). This method ensures that the spatial expansion
+embeddings without proportionally adjusting the hidden layers led to longer                                 maintains the relative positions of the original pixels while introducing new
+training times. However, co-designing embedding expansions with reduced                                     elements with a uniform value to ﬁll the increased space.
+hidden dimensions could partially alleviate this issue. Additionally, archi-                                     In our experiments, we applied this expansion method with a factor of
+tectures that already have pre-embedded symmetry-breaking mechanisms,                                       K = 2 for all datasets and neural network models. This expansion technique
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                                                           9
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                         Article
+
+Fig. 9 | Illustration of image pixel expansion. The
+ﬁgure exempliﬁes the expansion method for the digit
+“2”, where the expansion factor is 2, i.e., K = 2. The
+blank pixels in the expanded image are ﬁlled by
+constant values (e.g., 0.5).
+
+
+
+
+allows us to maintain a consistent number of neural network parameters                 In the neural network implementation, we employ three mass models
+by using a pooling method on the feature map extracted by the last               to represent the quasi-particles. Speciﬁcally, we deﬁne the masses for u/d
+convolutional layer. Consequently, the size of the feature map output            quarks, s quarks, and gluons as mu/d(T, θ1), ms(T, θ2), and mg(T, θ3), where
+depends only on the number of channels, not the input data size. During          θ1, θ2, and θ3 are the network parameters. Each mass model consists of 7
+training, we employed the Stochastic Gradient Descendent optimizer               residual blocks with 32 neurons and sigmoid activation functions. The input
+with an initial learning rate of 0.1, momentum of 0.9, and a weight decay        is the temperature T, and the output is the corresponding quasi-quark and
+of 5 × 10−4 for all neural network models. For the CIFAR, KMNIST,                quasi-gluon mass. Once the masses are determined, they are substituted into
+EuroSAT, and other datasets except for ImageNet, we used the Cosi-               Eq. (13), and the 50-point Gaussian quadrature method is used to compute
+neAnnealing method to adjust the learning rate, with Tmax set to match           the partition function ln Z. The QCD EoS is then calculated using Eqs. (12)
+the total number of training epochs. For the ImageNet-R and ImageNet-            and (14). The training objective is to minimize the mean squared error
+100 datasets, we decayed the learning rate by 0.2 at epochs 90, 120, and         between the neural network output and the Lattice QCD results from the
+160. This approach ensures that performance improvements are                     HotQCD collaboration41. For the expanded case, we only modify the input
+attributed to the image expansion technique rather than an increase in           dimension, expanding from T to (T, TC = 0.155 GeV).
+network parameters.
+                                                                                 Solving partial differential equations
+Methodology for expanding input dimensions in scientiﬁc tasks                    Experimental setup. We utilized a simple feedforward neural network
+Quantum chromodynamics. In QCD, the partition function ln ZðTÞ is                (FNN) architecture with ﬁve fully connected layers, each containing 100
+fundamental for calculating the pressure P(T) and energy density ϵ(T)            nodes. The PDEs were selected from the PINNacle benchmark, which
+using statistical dynamics formulae,                                             includes a diverse range of PDEs such as Burgers’ equation, Poisson’s
+                                                                                 equation, heat equation, Navier-Stokes equations, wave equations, and
+                ln ZðTÞ ¼ ln Z g ðTÞ þ ln Z u=d ðTÞ þ ln Z s ðTÞ;                chaotic PDEs like the Gray-Scott and Kuramoto-Sivashinsky equations. The
+                                     
+                   PðTÞ ¼ T ∂ ln∂VZðTÞ ;                                         experiments were conducted using the following setup:
+                                                                         ð12Þ
+                                      T
+                   ϵðTÞ ¼ TV ∂ ln∂TZðTÞ ;                                        PDE list. The list of PDEs included Burgers 1D, Burgers 2D, Poisson 2D,
+                            2
+
+                                           V                                     Poisson Boltzmann 2D, Poisson 3D with Complex Geometry, Poisson 2D of
+                                                                                 Many Area, Heat2D with Varying Coefﬁcient, Multiscale Heat2D, Heat2D
+where ln Z g ðTÞ, ln Z u=d ðTÞ, and ln Z s ðTÞ are the partition functions for   with ComplexGeometry, LongTime Heat2D, NS2D with LidDriven, NS2D
+gluons, u/d quarks, and s quarks, respectively. These partition functions can    with BackStep, NS2D with LongTime, Wave 1D, Heterogeneous Wave 2D,
+be computed from the momentum integration,                                       LongTime Wave 2D, Kuramoto Sivashinsky Equation, GrayScott Equation,
+                                                                                 Poisson ND, and Heat ND.
+                                      qﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ 
+                 dg V R 1                1
+   ln Z g ðTÞ ¼  2 0 p2 dp ln 1  exp     p2 þ m2g ðTÞ ;                       Training conﬁguration. The neural network was conﬁgured with 5 hidden
+                 2π                      T
+                                      qﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ       ð13Þ    layers each of 100 nodes and a learning rate of 10−3. The training was
+                 d qi V R 1 2             1
+  ln Z qi ðTÞ ¼ þ 2 0 p dp ln 1 þ exp      p2 þ m2qi ðTÞ :                      conducted for 20,000 iterations. The experiments were repeated 30 times
+                 2π                      T                                       with different random seeds ranging from 0 to 29 to ensure robustness.
+
+                                                                                 Implementation. The experiments were implemented using the DeepXDE57
+Here, dg = 16, d qs ¼ 12, and d qu=d ¼ 24 are the degrees of freedom for         library with PyTorch backend. The training process used Adam optimizer.
+gluons and quarks. These integrals can be numerically evaluated using a 50-      The models were trained using a combination of PDE residuals, boundary
+point Gaussian quadrature method56. With the calculated P(T) and ϵ(T), the       conditions, and available data losses exactly the same as in PINNacle.
+Eos can be obtained, linking the entropy density s with P(T) and ϵ(T) as,
+                                                                                 Analysis. To analyze the performance of the input expansion method, we
+                                                                                 focused on the distribution of the loss values for both the raw and expanded
+                                         ϵþP                                     input methods. The loss values were calculated as the MSE between the
+                                    s¼       :                           ð14Þ
+                                          T                                      predicted and true solutions of the PDEs.
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                   10
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                            Article
+
+Methodology for expanding input dimensions in other tasks                        FixedBertEmbedding class that allowed for the expansion of input
+Text classiﬁcation. Our Transformer architecture implementation                  dimensions. In the baseline model, we used the standard BERT embedding
+leverages PyTorch’s native modules for controlled experimentation. The           layer. This model served as the control to compare the effects of input
+input pipeline synthesizes 3-class sentiment embeddings (negative,               dimension expansion. The expanded embedding model included a linear
+neutral, positive) with balanced 1000 samples per class. For dimensional         layer to map the expanded input dimensions back to the original embedding
+expansion, 32D baseline embeddings are linearly projected to 64D                 size. This modiﬁcation aimed to introduce additional features into the input
+through a structured interpolation: each original feature is replicated,         space, potentially aiding the model in capturing more complex patterns in
+then padded with the global feature mean (min(x)+max(x))/2, preser-              the data to break the proposed symmetry.
+ving distributional continuity while doubling dimensionality.                          The FixedBertEmbedding class was designed to freeze the ori-
+     The Transformer encoder employs L=2 identical layers, each con-             ginal BERT embedding layer, preventing updates during training. The
+taining multi-head self-attention (H = 8 heads) followed by position-wise        original embeddings were expanded by interleaving them with zeros,
+feed-forward networks. To isolate the effects of input dimension scaling         effectively doubling their dimensions. A linear layer was then used to map
+from pure parameter growth, we strategically rebalanced hidden layer             these expanded dimensions back to the desired embedding size.
+dimensions-the baseline uses 1211D hidden states versus 512D in the                    Beyond the embedding layer, the Transformer architecture of the
+expanded model-achieving near-identical parameter counts (249,396 vs.            modiﬁed BERT model consisted of 4 layers, each with a hidden size of 48.
+249,219). Training utilizes Adam optimization with cross-entropy loss,           Each Transformer layer included 4 attention heads, allowing the model to
+executed for 20 epochs under ﬁxed random seeds (batch size: 32). Data            focus on different parts of the input sequence simultaneously. The inter-
+loaders implement full-batch shufﬂing with pinned memory for GPU                 mediate size for the feed-forward network within each layer was set to 3072,
+acceleration, ensuring deterministic reproducibility across trials.              providing a substantial capacity for learning complex representations. The
+                                                                                 model supported a maximum of 512 position embeddings, accommodating
+Image coloring. In the image coloring task, we use the CelebA dataset,           long input sequences. Additionally, the type vocabulary size was set to 2,
+where a generative model based on conditional diffusion is employed to           enabling the use of token type embeddings for distinguishing between dif-
+restore grayscale images to color RGB maps, utilizing a U-Net                    ferent segments of the input.
+architecture58 as the primary backbone. During training, we began with                 The input to the model included token IDs, token type IDs, and
+a three-channel color map and, similar to the DDPM approach59, pro-              position IDs, which were processed through the expanded embedding
+gressively added Gaussian random variables, diffusing the image into             layer. The output from the embedding layer was then fed into the
+nearly complete random noise. In the recoloring process, a random                Transformer layers. The ﬁnal output of the model was a classiﬁcation
+matrix is ﬁrst sampled, and then the grayscale map is input into the U-Net       logits vector, which was used to predict the class labels. This detailed
+as a condition. The denoising network then gradually removes the noise,          conﬁguration ensured that the model could effectively handle the
+generating a color image. Instead of using an implicit diffusion model, we       expanded input dimensions and leverage the additional features intro-
+directly diffuse the color map. The network work is trained with 4 × 105         duced by the modiﬁed embedding layer.
+steps with a learning rate of 10−4.
+      To expand the input, we applied the same pixel-level expansion             Training and evaluation. The training arguments were conﬁgured to save
+technique used in image classiﬁcation to both the color map before diffusion     the best model and evaluate the performance at each epoch. Key parameters
+and the grayscale map used as conditional input. This expansion increases        included a learning rate of 2 × 10−5, a batch size of 32, and a total of 30
+the size of the noise matrix that the diffusion model needs to predict. To       training epochs. The evaluation strategy was set to assess the model’s per-
+avoid the additional complexity for the neural network of learning to add        formance at the end of each epoch.
+noise to the newly ﬁlled pixels, we excluded the labels corresponding to these
+expanded pixel positions when calculating the color loss on the expanded         Analyzing the loss landscape in random number classiﬁcation
+image. This exclusion ensures that the neural network focuses only on the        To investigate the impact of input dimension expansion on the loss land-
+original pixel positions, simplifying the learning process.                      scape of neural networks, we conducted experiments using a simple FNN
+      An additional advantage of this approach is that it allows for a direct    for binary classiﬁcation of random numbers.
+comparison of the MSE between the expanded and unexpanded images. Since
+the number of pixels considered in the MSE calculation remains the same for      Input data. We used a random number between 0 and 1 as input to the
+both cases, we can effectively assess the impact of input expansion on image     network. The number was labeled as 0 if it was less than or equal to 0.5,
+coloring performance by comparing the MSE values of the two methods.             and as 1 otherwise.
+
+Sentiment analysis. We describe the method used to evaluate the effect           Model architectures. To compare cases for raw (the usual input) and
+of expanding input dimensions on sentiment analysis tasks using the              expanded (expanded input), we employed two network conﬁgurations:
+IMDB dataset. The goal was to assess whether adding constant values to                 A FNN with an input layer of size 1, followed by three hidden layers of
+the input dimensions could improve the performance of a BERT-based               sizes 3, 3, and 2, and an output layer of size 1. The activation function used
+model for binary classiﬁcation.                                                  was the hyperbolic tangent (tanh).
+                                                                                       A similar network but with an expanded input layer of size 2. In this
+Data preparation. We utilized the IMDB dataset, which contains movie             conﬁguration, the original input was augmented with an additional constant
+reviews labeled as either positive or negative. The dataset was divided into     value of 0.5. For example, if the original input was 0.7, the expanded input
+training and testing sets, each containing reviews stored in separate direc-     would be the vector [0.7, 0.5].
+tories for positive and negative sentiments.
+                                                                                 Loss Landscape analysis. To evaluate the loss landscapes, we varied the
+Data preprocessing. We used the DistilBertTokenizer to tokenize                  weights of the network layers, allowing each weight to take values of −1 or 1.
+the text data. The tokenizer was conﬁgured to truncate and pad the sequences     For each combination of weights, we computed the network’s output and
+to a maximum length of 256 tokens, ensuring that all input sequences are of      the corresponding loss using the MSE loss function.
+uniform length, which is necessary for batch processing in neural networks.           To explicitly demonstrate the effect of the additional dimension, we
+                                                                                 considered two scenarios in our analysis. One did not include bias terms in the
+Model architecture. We modiﬁed the BERT model to include an expanded             network layers, so the loss was computed solely based on the weights and the
+embedding layer. The embedding layer was replaced with a custom                  input data; and another included bias terms in the ﬁrst layer of the network.
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                      11
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                                                Article
+
+     By systematically varying the weights and biases, we were able to                      Loss landscape analysis. To analyze the loss landscapes of different network
+visualize and compare the loss landscapes. This approach allowed us to assess               conﬁgurations, we sorted the loss values for each weight combination to
+how input dimension expansion and the inclusion of bias terms inﬂuence the                  obtain a sequence of loss values from highest to lowest.
+training dynamics and optimization process of neural networks.
+                                                                                            Measuring the degree of symmetry breaking
+Analyzing the loss landscape of equivariance, dropout, and batch                            Measuring the degree of symmetry in a network is primarily achieved by
+normalization                                                                               comparing the correlations of the same network under different weight
+To systematically investigate the effects of equivariance, dropout, and batch               conﬁgurations (also called different replicas). We use different seeds to train
+normalization on the loss landscape of neural networks, we designed a series                the network models with identical hyper-parameters, and by measuring the
+of controlled experiments using a simple CNN architecture and a synthetic                   symmetry (i.e., correlation) between replicas, we can equivalently measure
+dataset. The following outlines the methodology employed in our study.                      the symmetry of the network structure itself. We applied this metric to the
+                                                                                            CIFAR-10 dataset using ﬁve distinct neural network architectures: Sim-
+Dataset generation. A synthetic dataset was constructed comprising 12                       pleCNN, DropoutCNN, BatchNormCNN, FlipEquivarianceCNN, and
+binary images, each of size 2 × 2 pixels, with corresponding binary labels                  RotationEquivarianceCNN.
+(Fig. 10). The images were designed to represent simple patterns, such as
+adjacent pixel pairs with values of −1, 0, or 1. Labels were assigned based                 Model architectures. Five distinct network conﬁgurations were deﬁned
+on the presence of speciﬁc patterns within the images, forming a binary                     to isolate the effects of equivariance, dropout, and batch normalization.
+classiﬁcation task.                                                                         The detailed structures of these ﬁve networks are as follows:
+      This dataset has an important characteristic: it exhibits invariance under                  SimpleCNN: Consists of two convolutional layers followed by ReLU
+180-degree rotations and ﬂips. Speciﬁcally, if an image is rotated by 180                   activations and max pooling, then a fully connected layer and an output layer.
+degrees or ﬂipped, its classiﬁcation label remains unchanged. However, if an                      DropoutCNN: Similar to SimpleCNN but includes a dropout layer
+image is rotated by 90 degrees, the classiﬁcation label may change, indicating              with a dropout rate of 0.3 between the fully connected layer and the
+that the dataset does not exhibit 90-degree rotational invariance. This property            output layer.
+is crucial for evaluating the effects of equivariance in neural networks.                         BatchNormCNN: Similar to SimpleCNN but includes batch normal-
+                                                                                            ization layers after each convolutional layer.
+Model architectures. Five distinct network conﬁgurations were deﬁned                              FlipEquivarianceCNN: Similar to SimpleCNN but includes a data
+to isolate the effects of equivariance, dropout, and batch normalization.                   augmentation step in the forward pass that horizontally ﬂips half of the
+The detailed structures if these ﬁve networks are as following,                             images in the batch.
+     Baseline ConvNet: A basic convolutional neural network consisting of                         RotationEquivarianceCNN: Similar to SimpleCNN but includes a data
+one convolutional layer, one fully connected layer, and an output layer.                    augmentation step in the forward pass that rotates half of the images in the
+     Baseline + dropout: The baseline CNN augmented with a dropout                          batch by 180 degrees.
+layer between the convolutional and fully connected layers, with a dropout
+rate of 0.3.                                                                                Training different networks. Data Preparation: The CIFAR-10 dataset
+     Baseline + BatchNorm: The baseline CNN enhanced with a batch                           was preprocessed by normalizing the images and splitting it into training
+normalization layer following the convolutional layer.                                      and testing sets. Data augmentation techniques such as random hor-
+     Baseline + Equivariant: The baseline CNN modiﬁed to ensure con-                        izontal ﬂips and rotations were applied for FlipEquivarianceCNN and
+volutional ﬁlters are invariant under speciﬁc transformations, such as ﬂips                 RotationEquivarianceCNN, respectively.
+and 180-degree rotations.                                                                        Model Training: The Adam optimizer with a learning rate of 0.001 and
+     Baseline + Wrong Equivariant: The baseline CNN adjusted to enforce                     weight decay of 10−3 was used. Each model was trained for 30 epochs with a
+invariance under 90-degree rotations, representing an incorrect equivar-                    batch size of 64, using cross-entropy loss. Training losses and test accuracies
+iance constraint.                                                                           were recorded for each epoch.
+
+Experimental setup. To comprehensively evaluate the loss landscapes, we                     Symmetry metric calculation. Training on 100 Images: A subset of 100
+generated all possible combinations of convolutional and linear layer                       images from the CIFAR-10 dataset was selected. Each model was trained
+weights, with each weight taking values of −1 or 1.                                         for 200 epochs under 200 different random seeds using the Adam opti-
+     In weight combination generation, all possible combinations of con-                    mizer, and the ﬁnal weights were saved.
+volutional and linear layer weights were generated, with each weight taking                      Dimensionality Reduction: The weights of each trained model were
+values of −1 or 1. For each weight combination, the ﬁve network conﬁg-                      extracted and ﬂattened. UMAP (Uniform Manifold Approximation and
+urations were used, and their loss values were computed using the cross-                    Projection) was then used to reduce the dimensionality of these weight
+entropy loss function.                                                                      vectors to 100 dimensions. UMAP is a non-linear dimensionality reduction
+
+
+
+
+Fig. 10 | Dataset of the 12 binary images. The images are color-coded as follows: red represents a pixel value of -1, light gray represents a pixel value of 0, and blue represents a
+pixel value of 1. The labels are indicated on the left side of each row.
+
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                                          12
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                          Article
+
+technique that is particularly well-suited for preserving the global structure    13. LeCun, Y., Bengio, Y. & Hinton, G. Deep learning. Nature 521,
+of high-dimensional data in a lower-dimensional space. This step helps in             436–444 (2015).
+comparing the models by reducing the complexity of the weight space while         14. Levine, H. & Tu, Y. Machine learning meets physics: A two-way street.
+retaining the essential features.                                                     Proc. Natl. Acad. Sci. USA 121, e2403580121 (2024).
+     Pairwise Distance Calculation: The pairwise Wasserstein distance             15. Onsager, L. Crystal statistics. I. A two-dimensional model with an
+between the reduced feature representations of the trained models was                 order-disorder transition. Phys. Rev. 65, 117 (1944).
+computed to measure the minimum cost of transporting mass in one dis-             16. Anderson, P. W. More is different. Science 177, 393–396 (1972).
+tribution to match another. This distance metric provides a meaningful way        17. Fok, R., An, A. & Wang, X. Spontaneous symmetry breaking in neural
+to compare the distributions of model weights.                                        networks. arXiv preprint arXiv:1710.06096 (2017).
+     Histogram and Mean Value Calculation: A histogram of the calculated          18. Tanaka, H. & Kunin, D. Noether’s learning dynamics: role of symmetry
+Wasserstein distances was constructed, and Gaussian smoothing was                     breaking in neural networks. In Proceedings of the 35th International
+applied to obtain a smooth curve. These smoothed histograms were nor-                 Conference on Neural Information Processing Systems 15 Vol. 38
+malized to form probability density functions. The mean value of the                  (Red Hook, NY, USA, Curran Associates Inc., 2021).
+probability density was used as the metric. A higher mean value indicates a       19. Choromanska, A., Henaff, M., Mathieu, M., Arous, G. B. & LeCun, Y.
+greater degree of symmetry breaking.                                                  The loss surfaces of multilayer networks. In Proceedings of the
+     The Wasserstein distance provides a meaningful metric for comparing              Eighteenth International Conference on Artiﬁcial Intelligence and
+the distributions of model weights. By examining the mean value of the                Statistics. (eds Lebanon G & Vishwanathan S. V. N.) 192–204 http://
+smoothed histogram, we can quantify the extent to which symmetry is                   proceedings.mlr.press/v38/choromanska15.pdf (PMLR, 2015).
+broken in the trained models. A higher mean value suggests that the models        20. Baldassi, C., Pittorino, F. & Zecchina, R. Shaping the learning
+have diverged more signiﬁcantly in their weight distributions, indicating a           landscape in neural networks around wide ﬂat minima. Proc. Natl.
+higher degree of symmetry breaking.                                                   Acad. Sci. USA 117, 161–170 (2020).
+                                                                                  21. Raissi, M., Perdikaris, P. & Karniadakis, G. E. Physics-informed neural
+Data availability                                                                     networks: a deep learning framework for solving forward and inverse
+The code and data used in the study can be found at https://doi.org/10.7910/          problems involving nonlinear partial differential equations. J. Comput.
+DVN/QCYE4M.                                                                           Phys. 378, 686–707 (2019).
+                                                                                  22. Cohen, T. S. & Welling, M. Group equivariant convolutional networks.
+Code availability                                                                     In Proc. 33rd International Conference on International Conference on
+The code used in the study can be found at https://doi.org/10.7910/DVN/               Machine Learning, 2990–2999 (JMLR.org, 2016).
+QCYE4M.                                                                           23. Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I. &
+                                                                                      Salakhutdinov, R. Dropout: a simple way to prevent neural networks
+Received: 5 January 2025; Accepted: 15 May 2025;                                      from overﬁtting. J. Mach. Learn. Res. 15, 1929–1958 (2014).
+Published online: 10 July 2025                                                    24. Ioffe, S. & Szegedy, C. Batch normalization: accelerating deep
+                                                                                      network training by reducing internal covariate shift. In Proc. 32nd
+References                                                                            International Conference on International Conference on Machine
+1.  Krizhevsky, A., Sutskever, I. & Hinton, G. E. Imagenet classiﬁcation with         Learning, 448–456 (JMLR.org, 2015).
+    deep convolutional neural networks. Commun. ACM 60, 84 – 90 (2012).           25. Mezard, M., Parisi, G., Virasoro, M. A. & Thouless, D. J. Spin glass
+2. He, K., Zhang, X., Ren, S. & Sun, J. Deep residual learning for image              theory and beyond. Physics. Today. 41, 109–110 (1988).
+    recognition. In Proc. IEEE Conference on Computer Vision and Pattern          26. Liao, H. et al. Exploring loss landscapes through the lens of spin glass
+    Recognition (CVPR) 770–778 https://doi.org/10.1109/CVPR.2016.90                   theory. arXiv preprint arXiv:2407.20724 (2024).
+    (2016).                                                                       27. Huang, G., Liu, Z., Van Der Maaten, L. & Weinberger, K. Q. Densely
+3. Vaswani, A. et al. Attention is all you need. In Proc. 31st International          connected convolutional networks. In Proc. IEEE Conference on
+    Conference on Neural Information Processing Systems 6000–6010                     Computer Vision and Pattern Recognition 2261–2269 (IEEE, 2017).
+    (Curran Associates Inc., 2017).                                               28. Tan, M. & Le, Q. Efﬁcientnet: Rethinking model scaling for
+4. Brown, T. B. et al. Language models are few-shot learners. In                      convolutional neural networks. In International Conference On
+    Proceedings of the 34th International Conference on Neural                        Machine Learning 6105–6114 (PMLR, 2019).
+    Information Processing Systems (Curran Associates Inc., 2020).                29. Howard, A. et al. Searching for mobilenetv3. In Proc. IEEE/CVF
+5. Mnih, V. et al. Human-level control through deep reinforcement                     International Conference on Computer Vision 1314–1324 (IEEE,
+    learning. Nature 518, 529–533 (2015).                                             2019).
+6. Esteva, A. et al. Dermatologist-level classiﬁcation of skin cancer with        30. Clanuwat, T. et al. Deep learning for classical Japanese literature.
+    deep neural networks. Nature 542, 115–118 (2017).                                 arXiv preprint arXiv:1812.01718 (2018).
+7. Rasp, S., Pritchard, M. S. & Gentine, P. Weatherbench: a benchmark             31. Xiao, H., Rasul, K. & Vollgraf, R. Fashion-mnist: a novel image dataset
+    dataset for data-driven weather forecasting. J. Adv. Model. Earth Syst.           for benchmarking machine learning algorithms. arXiv preprint
+    12, e2020MS002203 (2020).                                                         arXiv:1708.07747 (2017).
+8. Jumper, J. et al. Highly accurate protein structure prediction with            32. Helber, P., Bischke, B., Dengel, A. & Borth, D. Eurosat: A novel dataset
+    AlphaFold. Nature 596, 583–589 (2021).                                            and deep learning benchmark for land use and land cover
+9. Carleo, G. & Troyer, M. Solving the quantum many-body problem with                 classiﬁcation. IEEE Journal of Selected Topics in Applied Earth
+    artiﬁcial neural networks. Science 355, 602–606 (2017).                           Observations and Remote Sensing (IEEE, 2019).
+10. Elgammal, A., Liu, B., Elhoseiny, M. & Mazzone, M. Can: Creative              33. Maji, S., Rahtu, E., Kannala, J., Blaschko, M. & Vedaldi, A. Fine-
+    adversarial networks generating “art” by learning about styles and                Grained Visual Classiﬁcation of Aircraft. arXiv e-prints
+    deviating from style norms. In Proc. 8th International Conference on              arXiv:1306.5151 1306.5151 (2013).
+    Computational Creativity, ICCC 2017 (Georgia Institute of                     34. Cimpoi, M., Maji, S., Kokkinos, I., Mohamed, S. & Vedaldi, A.
+    Technology, 2017).                                                                Describing textures in the wild. In Proc. IEEE Conference on Computer
+11. Lipton, Z. C. The mythos of model interpretability. Queue 16, 31–57 (2018).       Vision and Pattern Recognition 3606–3613 (IEEE, 2014).
+12. Doshi-Velez, F. & Kim, B. Towards a rigorous science of interpretable         35. Gross, D. J. & Wilczek, F. Ultraviolet behavior of nonabelian gauge
+    machine learning. arXiv preprint arXiv:1702.08608 (2017).                         theories. Phys. Rev. Lett. 30, 1343–1346 (1973).
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                    13
+https://doi.org/10.1038/s44387-025-00010-0                                                                                                              Article
+
+36. Gross, F. et al. 50 Years of quantum chromodynamics. Eur. Phys. J. C         57. Lu, L., Meng, X., Mao, Z. & Karniadakis, G. E. DeepXDE: a deep
+    83, 1125 (2023).                                                                 learning library for solving differential equations. SIAM Rev. 63,
+37. Yagi, K., Hatsuda, T. & Miake, Y. Quark-Gluon Plasma: From Big Bang              208–228 (2021).
+    to Little Bang Vol. 23 (Cambridge University Press, 2005).                   58. Ronneberger, O., Fischer, P. & Brox, T. U-net: convolutional networks
+38. Busza, W., Rajagopal, K. & van der Schee, W. Heavy ion collisions: the           for biomedical image segmentation. In Medical Image Computing and
+    big picture, and the big questions. Ann. Rev. Nucl. Part. Sci. 68,               Computer-Assisted Intervention–MICCAI 2015: 18th International
+    339–376 (2018).                                                                  Conference, Munich, Germany, October 5–9, 2015, Proceedings, Part
+39. Pang, L.-G. et al. An equation-of-state-meter of quantum                         III 18, 234–241 (Springer, 2015).
+    chromodynamics transition from deep learning. Nat. Commun. 9, 210            59. Ho, J., Jain, A. & Abbeel, P. Denoising diffusion probabilistic models.
+    (2018).                                                                          In Proc. 34th International Conference on Neural Information
+40. Wilson, K. G. Conﬁnement of quarks. Phys. Rev. D. 10, 2445–2459 (1974).          Processing Systems (Curran Associates Inc., 2020).
+41. Bazavov, A. et al. Equation of state in (2+1)-ﬂavor QCD. Phys. Rev. D
+    90, 094503 (2014).                                                           Acknowledgements
+42. Hao, Z. et al. Pinnacle: A comprehensive benchmark of physics-               We are grateful to Dr. Jiarui Zhang in Northwest Institute of Nuclear
+    informed neural networks for solving PDEs. In Advances in Neural             Technology who provided suggestions on the clarity of the manuscript. This
+    Information Processing Systems Vol. 37 (eds. Globerson, A. et al.)           research has been funded by the National Key R\&D Program of China under
+    76721–76774 https://proceedings.neurips.cc/paper_ﬁles/paper/                 Grant 2020YFA0713900, the China NSFC projects under grant 12405318,
+    2024/ﬁle/8c63299fb2820ef41cb05e2ff11836f5-Paper-Datasets_                    12075098, 12435009, 62272375, the Major Key Project of PCL under Grant
+    and_Benchmarks_Track.pdf (Curran Associates, Inc., 2024)                     PCL2024A06, and Tianyuan Fund for Mathematics of the National Natural
+43. Liu, Z., Luo, P., Wang, X. & Tang, X. Deep learning face attributes in the   Science Foundation of China under grant 12426105.
+    wild. In Proc. International Conference on Computer Vision (ICCV)
+    (IEEE, 2015).                                                                Author contributions
+44. Maas, A. L. et al. Learning word vectors for sentiment analysis. In          Jun-Jie Zhang: Discovered the phenomenon of input expansion; proposed
+    Proceedings of the 49th Annual Meeting of the Association for                the symmetry breaking explanation; designed and conducted the experi-
+    Computational Linguistics: Human Language Technologies 142–150               ments on dropout, batch normalization, and equivariance; developed the
+    (Association for Computational Linguistics, 2011).                           metric to measure symmetry. Nan Cheng and Xiu-Cheng Wang: Discovered
+45. Devlin, J., Chang, M.-W., Lee, K. & Toutanova, K. Bert: Pre-training of      the phenomenon of input expansion; conducted all image classiﬁcation
+    deep bidirectional transformers for language understanding. In               tasks and the image coloring task. Fu-Peng Li: Conducted the QCD
+    Proceedings of the 2019 Conference of the North {A}merican Chapter           experiments. Jian-Nan Chen: Performed the example and analysis of the
+    of the Association for Computational Linguistics: Human Language             Ising model. Long-Gang Pang: Suggested the test of the PINNacle; super-
+    Technologies Vol. 1 (Jill, B. et al.) 4171–4186 https://aclanthology.org/    vised the QCD experiments. Deyu Meng: Suggested the development of the
+    N19-1423/, https://doi.org/10.18653/v1/N19-1423 (Association for             symmetry metric; supervised the entire work.
+    Computational Linguistics, 2019).
+46. Ising, E. Beitrag zur theorie des ferromagnetismus. Z. Phys. 31,             Competing interests
+    253–258 (1925).                                                              The authors declare no competing interests.
+47. Hopﬁeld, J. J. Neurons with graded response have collective
+    computational properties like those of two-state neurons. Proc. Natl.        Additional information
+    Acad. Sci. USA 81, 3088–3092 (1984).                                         Correspondence and requests for materials should be addressed to
+48. Hopﬁeld, J. J. Neural networks and physical systems with emergent            Long-Gang Pang or Deyu Meng.
+    collective computational abilities. Proc. Natl. Acad. Sci. USA 79,
+    2554–2558 (1982).                                                            Reprints and permissions information is available at
+49. Serpen, G. Adaptive hopﬁeld network. In Artiﬁcial Neural Networks            http://www.nature.com/reprints
+    and Neural Information Processing—ICANN/ICONIP 2003 (eds
+    Kaynak, O., Alpaydin, E., Oja, E. & Xu, L.) 3–10 (Springer Berlin            Publisher’s note Springer Nature remains neutral with regard to jurisdictional
+    Heidelberg, 2003).                                                           claims in published maps and institutional afﬁliations.
+50. Abe, S. Convergence acceleration of the Hopﬁeld neural network by
+    optimizing integration step sizes. IEEE Trans. Syst. Man Cybern. Part
+    B (Cybern.) 26, 194–201 (1996).                                              Open Access This article is licensed under a Creative Commons
+51. Krotov, D. & Hopﬁeld, J. J. Dense associative memory for pattern             Attribution-NonCommercial-NoDerivatives 4.0 International License,
+    recognition. In Proc. 30th International Conference on Neural                which permits any non-commercial use, sharing, distribution and
+    Information Processing Systems, NIPS’16, 1180–1188 (Curran                   reproduction in any medium or format, as long as you give appropriate
+    Associates Inc., 2016).                                                      credit to the original author(s) and the source, provide a link to the Creative
+52. Krotov, D. & Hopﬁeld, J. J. Large associative memory problem in              Commons licence, and indicate if you modiﬁed the licensed material. You
+    neurobiology and machine learning. In International Conference on            do not have permission under this licence to share adapted material
+    Learning Representations (2021).                                             derived from this article or parts of it. The images or other third party
+53. Demircigil, M., Heusel, J. & Löwe, M. et al. On a model of associative       material in this article are included in the article’s Creative Commons
+    memory with huge storage capacity. J. Stat. Phys. 168, 288–299 (2017).       licence, unless indicated otherwise in a credit line to the material. If material
+54. Ramsauer, H. et al. Hopﬁeld networks is all you need. In International       is not included in the article’s Creative Commons licence and your intended
+    Conference on Learning Representationshttps://openreview.net/                use is not permitted by statutory regulation or exceeds the permitted use,
+    forum?id=tL89RnzIiCd (2021).                                                 you will need to obtain permission directly from the copyright holder. To
+55. Namazifar, M., Hazarika, D. & Hakkani-Tür, D. Role of bias terms in dot-     view a copy of this licence, visit http://creativecommons.org/licenses/by-
+    product attention. In ICASSP 2023–2023 IEEE International Conference         nc-nd/4.0/.
+    on Acoustics, Speech and Signal Processing (ICASSP), 1–5 (2023).
+56. Golub, G. H. & Welsch, J. H. Calculation of gauss quadrature rules.          © The Author(s) 2025, corrected publication 2025
+    Math. Comput. 23, 221–221 (1969).
+
+
+npj Artiﬁcial Intelligence | (2025)1:12                                                                                                                        14
+
